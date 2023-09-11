@@ -16,6 +16,7 @@ public class DeliveryVan : MonoBehaviour
         itemCarried = Random.Range(10, 30);
         yield return new WaitUntil(()=> Vector3.Distance(transform.position, vanManager.vanStopPos[0].position) <= 1f);
         isDeliverable = true;
+        FindAnyObjectByType<DeliveryStarter>().deliveryVan = this;
         deliveryArea.deliverySign.SetActive(true);
         yield return new WaitUntil(() => readyToDeliver);
         yield return new WaitForSeconds(4);
