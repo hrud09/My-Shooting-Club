@@ -12,31 +12,22 @@ public class DeliveryArea : MonoBehaviour
     public float spawnedItemGap = 0.3f;
     public Transform[] packageStackPos; // Set this to have four positions
     public Transform packageUnpackPos;
-    public CollectingArea collectingArea;
+   
     private int currentItemIndex = 0;
+    private CollectingArea collectingArea;
 
+    private void Awake()
+    {
+        collectingArea = GetComponent<CollectingArea>();
+    }
     void Start()
     {
-        generatedItems = new List<GameObject>();
-        GetDelivery(4);
+        generatedItems = new List<GameObject>();   
     }
-    public void GetDelivery(int packageCount)
+    public void GetDelivery(int packageCount, DeliveryVan van)
     {
         StartCoroutine(GenerateItems(packageCount));
-        SendAPackageForUnpacking();
-    }
-
-
-    public void SendAPackageForUnpacking()
-    {
-        if (generatedItems.Count <= 0) return;
-        GameObject package = GetAndRemoveLastItem();
-        package.transform.DOMove(packageUnpackPos.position, 1).OnComplete(() =>
-        {
-            collectingArea.GenerateItems(bulletPerPackage);           
-            Destroy(package);
-        });
-        
+        van.RemoveThis();
     }
     IEnumerator GenerateItems(int _packageCount)
     {
@@ -52,8 +43,26 @@ public class DeliveryArea : MonoBehaviour
             currentItemIndex = (currentItemIndex + 1) % packageStackPos.Length;
 
         }
-        Reposition();
     }
+    public void SendAPackageForUnpacking(float delay)
+    {
+        StartCoroutine(SendAPackageForUnpackingWithDelay(delay));
+    }
+    IEnumerator SendAPackageForUnpackingWithDelay(float delay)
+    {
+        if (generatedItems.Count > 0)
+        {
+            yield return new WaitForSeconds(delay);
+            GameObject package = GetAndRemoveLastItem();
+            package.transform.DOMove(packageUnpackPos.position, 1).OnComplete(() =>
+            {
+                collectingArea.GenerateItems(bulletPerPackage);
+                Destroy(package);
+            });
+        }
+    }
+   
+   
     void Reposition()
     {
         if (generatedItems.Count > 0)
@@ -83,5 +92,4 @@ public class DeliveryArea : MonoBehaviour
         }
         
     }
-
 }

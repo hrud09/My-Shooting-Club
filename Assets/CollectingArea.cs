@@ -13,13 +13,18 @@ public class CollectingArea : MonoBehaviour
     public List<GameObject> generatedItems;
     public float spawnedItemGap = 0.3f;
     public Transform[] BulletStackPos; // Set this to have four positions
-    
     private int currentItemIndex = 0;
+
     private DeliveryArea deliveryArea;
-    void Start()
+
+    private void Awake()
     {
         deliveryArea = GetComponent<DeliveryArea>();
-        generatedItems = new List<GameObject>();      
+    }
+    void Start()
+    {      
+        generatedItems = new List<GameObject>();
+        StartCoroutine(CheckForDelivery(1));
     }
     public void GenerateItems(int bulletsPerPackage)
     {
@@ -40,13 +45,14 @@ public class CollectingArea : MonoBehaviour
         }
        
         // Call the CheckForDelivery method after all items are generated
-        CheckForDelivery();
+       StartCoroutine(CheckForDelivery(0));
     }
 
-    private void CheckForDelivery()
+    public IEnumerator CheckForDelivery(float delay)
     {
         unpackingPackage = false;
-        deliveryArea.SendAPackageForUnpacking();
+        yield return new WaitUntil(() => deliveryArea.generatedItems.Count > 0);
+        deliveryArea.SendAPackageForUnpacking(delay);
     }
 
     void Reposition()
