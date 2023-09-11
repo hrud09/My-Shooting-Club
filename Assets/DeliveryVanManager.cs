@@ -34,13 +34,13 @@ public class DeliveryVanManager : MonoBehaviour
 
         for (int i = loadedVans.Count - 1; i >= 0; i--)
         {
-            loadedVans[i].transform.position = Vector3.Lerp(loadedVans[i].transform.position, vanStopPos[i].position, vanSpeed * Time.deltaTime);
+            loadedVans[i].transform.position = Vector3.MoveTowards(loadedVans[i].transform.position, vanStopPos[i].position, vanSpeed);
         }
     }
 
     private void SpawnDeliveryVan()
     {
-        GameObject vanGO = Instantiate(deliveryVanPrefab, vanStopPos[4]);
+        GameObject vanGO = Instantiate(deliveryVanPrefab, vanStopPos[vanStopPos.Length-1]);
         vanGO.GetComponent<DeliveryVan>().vanManager = this;
         vanGO.GetComponent<DeliveryVan>().deliveryArea = deliveryArea;
         loadedVans.Add(vanGO);

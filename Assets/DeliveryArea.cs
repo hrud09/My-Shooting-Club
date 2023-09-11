@@ -5,6 +5,8 @@ using DG.Tweening;
 
 public class DeliveryArea : MonoBehaviour
 {
+
+    
     public float timeToSpawn;
     public GameObject generateItemPrefab;
     public int bulletPerPackage;
@@ -12,7 +14,7 @@ public class DeliveryArea : MonoBehaviour
     public float spawnedItemGap = 0.3f;
     public Transform[] packageStackPos; // Set this to have four positions
     public Transform packageUnpackPos;
-   
+    public GameObject deliverySign;
     private int currentItemIndex = 0;
     private CollectingArea collectingArea;
 
