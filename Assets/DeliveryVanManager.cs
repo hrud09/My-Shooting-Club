@@ -4,21 +4,20 @@ using UnityEngine;
 using DG.Tweening;
 using System;
 
+
+[RequireComponent(typeof(SpawnedObjectsManager))]
 public class DeliveryVanManager : MonoBehaviour
 {
     public int maximumVansCount;
     public float deliveryVanSpawnTime;
-
     private float currentDeliveryVanSpawnTime;
-
     public GameObject deliveryVanPrefab;
     public Transform[] vanStopPos;
     public List<GameObject> loadedVans;
-    public DeliveryArea deliveryArea;
+    public DeliveryAreaManager deliveryArea;
     public float vanSpeed;
     public DeliveryStarter deliveryStarter;
     public float deliverySpeedMultplier;   
-
 
     private void Start()
     {

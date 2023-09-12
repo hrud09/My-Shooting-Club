@@ -10,7 +10,7 @@ public class Van : MonoBehaviour
     public bool isDeliverable, readyToDeliver;
     public bool delivered;
     public DeliveryVanManager vanManager;
-    public DeliveryArea deliveryArea;
+    public DeliveryAreaManager deliveryArea;
     private DeliveryStarter deliveryStarter;
 
   
