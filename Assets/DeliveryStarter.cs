@@ -9,29 +9,33 @@ public class DeliveryStarter : MonoBehaviour
     public GameObject deliverProgressObj;
     public Image deliverProressFill;
     public float fillAmount;
-    public DeliveryVan deliveryVan;
-    // Start is called before the first frame update
-
+    public Van deliveryVan;
+    public GameObject deliveryIndicatorArrow;
+    public DeliveryVanManager deliveryVanManager;
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")
         {
             deliverProgressObj.SetActive(true);
+            deliveryIndicatorArrow.SetActive(false);
         }
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.tag == "Player")
+        if (other.tag == "Player" && deliveryVan)
         {
-            fillAmount += Time.deltaTime;
+            fillAmount += Time.deltaTime * deliveryVanManager.deliverySpeedMultplier; ;
             deliverProressFill.fillAmount = fillAmount;
             if (fillAmount>=1)
             {
-                if (deliveryVan)
+                if (!deliveryVan.readyToDeliver)
                 {
                     deliveryVan.readyToDeliver = true;
-                }
+                    fillAmount = 0;
+                    deliverProressFill.fillAmount = fillAmount;
+                    deliveryVan = null;
+                }             
             }
         }
     }
@@ -40,6 +44,9 @@ public class DeliveryStarter : MonoBehaviour
         if (other.tag == "Player")
         {
             fillAmount = 0;
+            deliverProressFill.fillAmount = fillAmount;
+            deliverProgressObj.SetActive(false);
+            deliveryIndicatorArrow.SetActive(true);
         }
     }
 }

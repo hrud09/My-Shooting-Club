@@ -13,7 +13,7 @@ public class DeliveryArea : MonoBehaviour
     public List<GameObject> generatedItems;
     public float spawnedItemGap = 0.3f;
     public Transform[] packageStackPos; // Set this to have four positions
-    public Transform packageUnpackPos;
+    public Transform[] packageUnpackPos;
     public GameObject deliverySign;
     private int currentItemIndex = 0;
     private CollectingArea collectingArea;
@@ -26,16 +26,18 @@ public class DeliveryArea : MonoBehaviour
     {
         generatedItems = new List<GameObject>();   
     }
-    public void GetDelivery(int packageCount, DeliveryVan van)
+    public void GetDelivery(int packageCount, Van van)
     {
-        StartCoroutine(GenerateItems(packageCount));
-        van.RemoveThis();
+        StartCoroutine(GenerateItems(packageCount, van));
+       
     }
-    IEnumerator GenerateItems(int _packageCount)
+    IEnumerator GenerateItems(int _packageCount, Van van)
     {
+        int deliverredAmount = 0;
         while (_packageCount > 0)
         {
             _packageCount--;
+            deliverredAmount++;
             GameObject newItem = Instantiate(generateItemPrefab, packageStackPos[currentItemIndex].position, Quaternion.identity);
             newItem.transform.SetParent(packageStackPos[currentItemIndex]);
             //newItem.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 0));
@@ -43,8 +45,11 @@ public class DeliveryArea : MonoBehaviour
             Reposition();
             yield return new WaitForSeconds(timeToSpawn);
             currentItemIndex = (currentItemIndex + 1) % packageStackPos.Length;
-
         }
+
+        if (deliverredAmount == van.itemCarried) van.delivered = true;
+        yield return new WaitUntil(() => van.delivered);
+        van.RemoveThis();
     }
     public void SendAPackageForUnpacking(float delay)
     {
@@ -56,10 +61,19 @@ public class DeliveryArea : MonoBehaviour
         {
             yield return new WaitForSeconds(delay);
             GameObject package = GetAndRemoveLastItem();
-            package.transform.DOMove(packageUnpackPos.position, 1).OnComplete(() =>
+            //packageUnpackPos[0].position = new Vector3(package.transform.position.x + 1, packageUnpackPos[0].position.y, packageUnpackPos[0].position.z);
+            package.transform.DOJump(packageUnpackPos[0].position, 3, 1, 1).OnComplete(() =>
             {
-                collectingArea.GenerateItems(bulletPerPackage);
-                Destroy(package);
+                package.transform.DOJump(packageUnpackPos[1].position, 2, 1, 1).OnComplete(() =>
+                {
+                    collectingArea.GenerateItems(bulletPerPackage);
+                    package.transform.DOScale(Vector3.zero, 0.2f).OnComplete(() =>
+                    {
+                        package.GetComponent<Crate>().Break();
+                    });
+                });
+
+
             });
         }
     }

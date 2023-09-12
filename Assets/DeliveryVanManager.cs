@@ -16,6 +16,9 @@ public class DeliveryVanManager : MonoBehaviour
     public List<GameObject> loadedVans;
     public DeliveryArea deliveryArea;
     public float vanSpeed;
+    public DeliveryStarter deliveryStarter;
+    public float deliverySpeedMultplier;   
+
 
     private void Start()
     {
@@ -41,8 +44,8 @@ public class DeliveryVanManager : MonoBehaviour
     private void SpawnDeliveryVan()
     {
         GameObject vanGO = Instantiate(deliveryVanPrefab, vanStopPos[vanStopPos.Length-1]);
-        vanGO.GetComponent<DeliveryVan>().vanManager = this;
-        vanGO.GetComponent<DeliveryVan>().deliveryArea = deliveryArea;
+        vanGO.GetComponent<Van>().vanManager = this;
+        vanGO.GetComponent<Van>().deliveryArea = deliveryArea;
         loadedVans.Add(vanGO);
     }
 

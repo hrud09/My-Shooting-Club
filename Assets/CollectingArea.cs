@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,8 +15,9 @@ public class CollectingArea : MonoBehaviour
     public float spawnedItemGap = 0.3f;
     public Transform[] BulletStackPos; // Set this to have four positions
     private int currentItemIndex = 0;
-
     private DeliveryArea deliveryArea;
+
+    public int maxBulletAmount;
 
     private void Awake()
     {
@@ -38,6 +40,7 @@ public class CollectingArea : MonoBehaviour
         {
             GameObject newItem = Instantiate(generateItemPrefab, BulletStackPos[currentItemIndex].position, Quaternion.identity);
             newItem.transform.SetParent(BulletStackPos[currentItemIndex]);
+            newItem.transform.DORotate(Vector3.up * 30, 0.2f);
             generatedItems.Add(newItem);
             Reposition();
             yield return new WaitForSeconds(timeToSpawn);
@@ -52,7 +55,8 @@ public class CollectingArea : MonoBehaviour
     {
         unpackingPackage = false;
         yield return new WaitUntil(() => deliveryArea.generatedItems.Count > 0);
-        deliveryArea.SendAPackageForUnpacking(delay);
+        if (generatedItems.Count < maxBulletAmount) deliveryArea.SendAPackageForUnpacking(delay);
+
     }
 
     void Reposition()
