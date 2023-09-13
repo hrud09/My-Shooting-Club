@@ -71,21 +71,5 @@ public class DeliveryAreaManager : MonoBehaviour
         
     }
 
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.gameObject.layer == 6)
-        {
-            StackManager stackManager = other.gameObject.GetComponent<StackManager>();
-
-            if (stackManager.collectedItems.Count == 0)
-            {
-                stackManager.currectItemType = collectionAreaInfo.itemType;
-            }          
-            if (stackManager.currectItemType == collectionAreaInfo.itemType)
-            {
-                stackManager.GetItem(collectionAreaInfo.generatedItems.Count, this);
-            }
-
-        }
-    }
+   
 }

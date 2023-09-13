@@ -44,7 +44,23 @@ public class StackManager : MonoBehaviour
             collectedItems[i].transform.rotation = Quaternion.Slerp(collectedItems[i].transform.rotation, stackPos.rotation, Time.deltaTime * 1 / (i + 1) * collectionSpeed);
         }
     }
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.layer == 7)
+        {
+            DeliveryAreaManager deliveryAreaManager = other.gameObject.GetComponentInParent<DeliveryAreaManager>();
 
+            if (collectedItems.Count == 0)
+            {
+                currectItemType = deliveryAreaManager.collectionAreaInfo.itemType;
+            }
+            if (currectItemType == deliveryAreaManager.collectionAreaInfo.itemType)
+            {
+                GetItem(deliveryAreaManager.collectionAreaInfo.generatedItems.Count, deliveryAreaManager);
+            }
+
+        }
+    }
 }
 [System.Serializable]
 public class CollectionAreaInfo{
