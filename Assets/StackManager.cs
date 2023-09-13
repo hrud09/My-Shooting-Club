@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public enum ItemTypes {
     Bullet,
@@ -9,8 +8,6 @@ public enum ItemTypes {
 }
 public class StackManager : MonoBehaviour
 {
-    public static StackManager Instance;
-
     public bool isStacking;
     public Transform stackPos;
     public float gapOnYAxis;
@@ -37,20 +34,17 @@ public class StackManager : MonoBehaviour
         isStacking = false;
     }
 
-    private void LateUpdate()
+    private void Update()
     {
         for (int i = 0; i < collectedItems.Count; i++)
         {
-            collectedItems[i].transform.position = Vector3.Lerp(collectedItems[i].transform.position, stackPos.position + Vector3.up * i * gapOnYAxis, Time.deltaTime * (collectedItems.Count - i) * collectionSpeed);
+            Vector3 initPos = collectedItems[i].transform.position;
+            initPos = stackPos.position + Vector3.up * i * gapOnYAxis;
+            collectedItems[i].transform.position = initPos;
             collectedItems[i].transform.rotation = Quaternion.Slerp(collectedItems[i].transform.rotation, stackPos.rotation, Time.deltaTime * 1 / (i + 1) * collectionSpeed);
         }
     }
 
-    private void Awake()
-    {
-        Instance = this;
-    }
-  
 }
 [System.Serializable]
 public class CollectionAreaInfo{

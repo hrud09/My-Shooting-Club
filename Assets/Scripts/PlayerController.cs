@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // Move the player using Rigidbody velocity
-        movement = transform.forward * moveDirection.magnitude * moveSpeed;
+        movement = moveDirection * moveSpeed;
         
     }
 

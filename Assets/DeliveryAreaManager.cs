@@ -75,14 +75,13 @@ public class DeliveryAreaManager : MonoBehaviour
     {
         if (other.gameObject.layer == 6)
         {
-            print("Hello");
             StackManager stackManager = other.gameObject.GetComponent<StackManager>();
 
             if (stackManager.collectedItems.Count == 0)
             {
                 stackManager.currectItemType = collectionAreaInfo.itemType;
             }          
-             if (stackManager.currectItemType == collectionAreaInfo.itemType)
+            if (stackManager.currectItemType == collectionAreaInfo.itemType)
             {
                 stackManager.GetItem(collectionAreaInfo.generatedItems.Count, this);
             }
