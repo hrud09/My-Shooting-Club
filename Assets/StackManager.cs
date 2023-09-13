@@ -16,6 +16,13 @@ public class StackManager : MonoBehaviour
     public ItemTypes collectedItemType;
     public List<GameObject> collectedItems;
 
+
+    private Animator animator;
+
+    private void Start()
+    {
+        animator = GetComponent<Animator>();
+    }
     private void Update()
     {
         for (int i = 0; i < collectedItems.Count; i++)
@@ -54,6 +61,7 @@ public class StackManager : MonoBehaviour
             {
                 GameObject g = collectedItems[collectedItems.Count - 1];
                 collectedItems.Remove(g);
+                if (collectedItems.Count == 0) animator.SetLayerWeight(1, 0);
                 unpackAreaManager.DisposeAPackage(g);
             }
            
@@ -63,7 +71,7 @@ public class StackManager : MonoBehaviour
     public void GetItem(int generatedItemCount, GameObject deliverredPackage)
     {
         if (generatedItemCount <= 0) return;
-        GetComponent<Animator>().SetLayerWeight(1, 1);
+        animator.SetLayerWeight(1, 1);
         isStacking = true;
         GameObject item = deliverredPackage;
         StartCoroutine(StackItems(item));

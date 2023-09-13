@@ -8,49 +8,74 @@ public class UnpackAreaManager : MonoBehaviour
     public List<GameObject> disposedPackages;
     public int maxPackageCapacity;
     public bool isDisposing;
+    public bool isUnpacking;
     public Transform dispossedParent;
     public Transform[] disposPoses;
     public float spawnedItemGap;
     public float unstackTime;
-    void Start()
-    {
-        //DisposeAPackage();
-        //StartCoroutine(UnPack());
-    }
+    public float unPackTime;
 
+    public Transform[] movementPositions;
     public void DisposeAPackage(GameObject _package) {
 
         isDisposing = true;
-        MovePackages(_package);
-
-
+        MovetoUnpackingStack(_package);
         //StartCoroutine(UnPack());
     }
-
-    public IEnumerator UnPack()
-    {
-
-        yield return new WaitUntil(() => disposedPackages.Count > 0 && !isDisposing);
-        GameObject _selectedPackage = disposedPackages[disposedPackages.Count - 1];
-        disposedPackages.Remove(_selectedPackage);
-        _selectedPackage.transform.parent = dispossedParent;
-        Reposition();
-    }
-
-    private void MovePackages(GameObject package)
+    private void MovetoUnpackingStack(GameObject package)
     {
         int index = disposedPackages.Count;
         float stackHeight = Mathf.Floor(index / disposPoses.Length);
         Vector3 newPosition = disposPoses[index % disposPoses.Length].position + Vector3.up * spawnedItemGap * stackHeight;
-      
-        package.transform.DOJump(newPosition, 3, 1, unstackTime).OnComplete(()=>{
+
+        package.transform.DOJump(newPosition, 2, 1, unstackTime).OnComplete(() => {
 
             isDisposing = false;
             disposedPackages.Add(package);
             package.transform.parent = dispossedParent;
-            package.transform.DOLocalRotate(Vector3.zero, unstackTime);
+            package.transform.DOLocalRotate(Vector3.zero, unstackTime).OnComplete(()=> {
+            CheckForUnpacking();
+
+        });
             Reposition();
         });
+    }
+
+
+
+    private void CheckForUnpacking() {
+
+        if (disposedPackages.Count > 0 && !isUnpacking) {
+
+            isUnpacking = true;
+            UnPack();
+        
+        }
+    }
+    public void UnPack()
+    {
+
+        GameObject _selectedPackage = disposedPackages[disposedPackages.Count - 1];
+        disposedPackages.Remove(_selectedPackage);
+        _selectedPackage.transform.DOJump(movementPositions[0].position, 2, 1, unPackTime * 0.3f).OnComplete(() => {
+
+            _selectedPackage.transform.DOMove(movementPositions[1].position, unPackTime * 0.6f).OnComplete(() => {
+
+                _selectedPackage.GetComponent<Crate>().Break();
+                isUnpacking = false;
+                Reposition();
+                CheckForUnpacking();
+            });
+        });
+    }
+
+    public bool IsInDisposableCondition()
+    {
+        if (disposedPackages.Count >= maxPackageCapacity || isDisposing)
+        {
+            return false;
+        }
+        return true;
     }
     void Reposition()
     {
@@ -60,16 +85,8 @@ public class UnpackAreaManager : MonoBehaviour
             {
                 float stackHeight = Mathf.Floor(i / disposPoses.Length);
                 Vector3 newPosition = disposPoses[i % disposPoses.Length].position + Vector3.up * spawnedItemGap * stackHeight;
-                disposedPackages[i].transform.position = Vector3.Lerp(disposedPackages[i].transform.position, newPosition, Time.deltaTime * 10);
+                disposedPackages[i].transform.position = newPosition;
             }
         }
-    }
-    public bool IsInDisposableCondition()
-    {
-        if (disposedPackages.Count >= maxPackageCapacity || isDisposing)
-        {
-            return false;
-        }
-        return true;
     }
 }

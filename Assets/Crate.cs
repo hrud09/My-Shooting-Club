@@ -19,14 +19,15 @@ public class Crate : MonoBehaviour
         {
             GameObject g =  transform.GetChild(i).gameObject;
             g.AddComponent<Rigidbody>();
-            g.transform.parent = null;
+            MeshCollider m =  g.AddComponent<MeshCollider>();
+            m.convex = true;
         }
         rigidbodies = GetComponentsInChildren<Rigidbody>();
-        for (int i = 0; i < rigidbodies.Length; i++)
+        for (int i = 0; i < transform.childCount; i++)
         {
-            rigidbodies[i].transform.DOScale(Vector3.zero, 0.1f).SetDelay(1f).OnComplete(()=> {
+            transform.GetChild(i).DOScale(Vector3.zero, 0.3f).OnComplete(()=> {
 
-                Destroy(gameObject);
+                if (i == transform.childCount - 1) Destroy(gameObject);
             
             });
         }
