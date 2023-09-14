@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class BulletStackManager : MonoBehaviour
+public class BulletSpawnManager : MonoBehaviour
 {
 
     public UnpackAreaManager unpackAreaManager;
     public CollectionAreaInfo collectionAreaInfo;
     public Transform[] bulletMovementPos;
-
+    public BulletTrayManager bulletTrayManager;
     public void GenerateBullet(int bulletCount)
     {
         StartCoroutine(GenerateBulletsDelay(bulletCount));
     }
 
-    private IEnumerator GenerateBulletsDelay(int bulletCount) {
+    private IEnumerator GenerateBulletsDelay(int bulletCount)
+    {
 
         for (int i = 0; i < bulletCount; i++)
         {
@@ -24,15 +25,25 @@ public class BulletStackManager : MonoBehaviour
             collectionAreaInfo.generatedItems.Add(bullet);
             MoveObject(bullet.transform);
         }
-
-      
     }
 
-    void MoveObject(Transform bullet) {
+    void MoveObject(Transform bullet)
+    {
 
-        bullet.DOMove(bulletMovementPos[1].position, 0.5f).OnComplete(() => {
+        bullet.DOMove(bulletMovementPos[1].position, 1f).SetEase(Ease.Linear).OnComplete(() =>
+        {
 
             bullet.GetComponent<Rigidbody>().isKinematic = false;
+            if (bulletTrayManager.currentBulletTray.trayFilled)
+            {
+
+                Destroy(bullet.gameObject, 3);
+            }
+            else
+            {
+                bulletTrayManager.currentBulletTray.StoreBullet(bullet.gameObject);
+            }
+
             unpackAreaManager.CheckForUnpacking();
         });
     }

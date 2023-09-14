@@ -9,14 +9,14 @@ public class Van : MonoBehaviour
     public int itemCarried;
     public bool isDeliverable, readyToDeliver;
     public bool delivered;
-    public DeliveryVanManager vanManager;
+    public DeliveryVanController vanManager;
     public DeliveryAreaManager deliveryArea;
-    private DeliveryStarter deliveryStarter;
+    private DeliveryStartCollider deliveryStarter;
 
   
     private IEnumerator Start()
     {
-        deliveryStarter = vanManager.deliveryStarter;
+        deliveryStarter = deliveryArea.deliverySign.GetComponentInChildren<DeliveryStartCollider>();
         itemCarried = Random.Range(5, 10);
         yield return new WaitUntil(()=> Vector3.Distance(transform.position, vanManager.vanStopPos[0].position) <= 1f);
         isDeliverable = true;

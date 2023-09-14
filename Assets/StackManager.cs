@@ -56,7 +56,6 @@ public class StackManager : MonoBehaviour
         }
         else if (other.gameObject.layer == 8)
         {
-            print("8");
             UnpackAreaManager unpackAreaManager = other.gameObject.GetComponentInParent<UnpackAreaManager>();
             if (collectedItems.Count > 0 && unpackAreaManager.IsInDisposableCondition())
             {

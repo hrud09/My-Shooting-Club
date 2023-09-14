@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DeliveryStarter : MonoBehaviour
+public class DeliveryStartCollider : MonoBehaviour
 {
 
     public GameObject deliverProgressObj;
@@ -11,7 +11,7 @@ public class DeliveryStarter : MonoBehaviour
     public float fillAmount;
     public Van deliveryVan;
     public GameObject deliveryIndicatorArrow;
-    public DeliveryVanManager deliveryVanManager;
+    public DeliveryVanController deliveryVanManager;
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")

@@ -15,7 +15,7 @@ public class UnpackAreaManager : MonoBehaviour
     public float unpackTime;
 
     public Transform[] movementPositions;
-    public BulletStackManager bulletStackManager;
+    public BulletSpawnManager bulletStackManager;
     public void DisposeAPackage(GameObject _package) {
 
         isDisposing = true;
@@ -40,9 +40,6 @@ public class UnpackAreaManager : MonoBehaviour
             Reposition();
         });
     }
-
-
-
     public void CheckForUnpacking() {
 
         if (disposedPackages.Count > 0 && !isUnpacking) {
