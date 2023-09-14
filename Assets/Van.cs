@@ -17,7 +17,7 @@ public class Van : MonoBehaviour
     private IEnumerator Start()
     {
         deliveryStarter = vanManager.deliveryStarter;
-        itemCarried = Random.Range(10, 30);
+        itemCarried = Random.Range(5, 10);
         yield return new WaitUntil(()=> Vector3.Distance(transform.position, vanManager.vanStopPos[0].position) <= 1f);
         isDeliverable = true;
         deliveryStarter.deliveryVan = this;

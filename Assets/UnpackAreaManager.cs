@@ -6,16 +6,16 @@ using DG.Tweening;
 public class UnpackAreaManager : MonoBehaviour
 {
     public List<GameObject> disposedPackages;
-    public int maxPackageCapacity;
     public bool isDisposing;
     public bool isUnpacking;
     public Transform dispossedParent;
     public Transform[] disposPoses;
     public float spawnedItemGap;
     public float unstackTime;
-    public float unPackTime;
+    public float unpackTime;
 
     public Transform[] movementPositions;
+    public BulletStackManager bulletStackManager;
     public void DisposeAPackage(GameObject _package) {
 
         isDisposing = true;
@@ -43,7 +43,7 @@ public class UnpackAreaManager : MonoBehaviour
 
 
 
-    private void CheckForUnpacking() {
+    public void CheckForUnpacking() {
 
         if (disposedPackages.Count > 0 && !isUnpacking) {
 
@@ -56,22 +56,25 @@ public class UnpackAreaManager : MonoBehaviour
     {
 
         GameObject _selectedPackage = disposedPackages[disposedPackages.Count - 1];
+        //Get bullet count from the crate
+        int bulletCount = _selectedPackage.GetComponent<Crate>().bulletCount;
+        unpackTime = bulletCount * 0.2f;
         disposedPackages.Remove(_selectedPackage);
-        _selectedPackage.transform.DOJump(movementPositions[0].position, 2, 1, unPackTime * 0.3f).OnComplete(() => {
+        _selectedPackage.transform.DOJump(movementPositions[0].position, 2, 1, 0.3f).OnComplete(() => {
 
-            _selectedPackage.transform.DOMove(movementPositions[1].position, unPackTime * 0.6f).OnComplete(() => {
+            _selectedPackage.transform.DOMove(movementPositions[1].position, 0.6f).SetDelay(unpackTime).OnComplete(() => {
 
                 _selectedPackage.GetComponent<Crate>().Break();
+                bulletStackManager.GenerateBullet(bulletCount);
                 isUnpacking = false;
                 Reposition();
-                CheckForUnpacking();
             });
         });
     }
 
     public bool IsInDisposableCondition()
     {
-        if (disposedPackages.Count >= maxPackageCapacity || isDisposing)
+        if (isDisposing)
         {
             return false;
         }

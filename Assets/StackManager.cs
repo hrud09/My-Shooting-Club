@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
+using UnityEditor;
 
 public enum ItemTypes {
     Bullet,
@@ -15,7 +17,7 @@ public class StackManager : MonoBehaviour
     public float collectionSpeed;
     public ItemTypes collectedItemType;
     public List<GameObject> collectedItems;
-
+    public float stackTime;
 
     private Animator animator;
 
@@ -27,8 +29,7 @@ public class StackManager : MonoBehaviour
     {
         for (int i = 0; i < collectedItems.Count; i++)
         {
-            Vector3 initPos = collectedItems[i].transform.position;
-            initPos = stackPos.position + Vector3.up * i * gapOnYAxis;
+            Vector3 initPos = stackPos.position + Vector3.up * i * gapOnYAxis;
             collectedItems[i].transform.position = initPos;
             collectedItems[i].transform.rotation = Quaternion.Slerp(collectedItems[i].transform.rotation, stackPos.rotation, Time.deltaTime * 1 / (i + 1) * collectionSpeed);
         }
@@ -46,10 +47,10 @@ public class StackManager : MonoBehaviour
                 {
                     collectedItemType = deliveryAreaManager.collectionAreaInfo.itemType;
                 }
-                if (collectedItemType == deliveryAreaManager.collectionAreaInfo.itemType)
+                if (collectedItemType == deliveryAreaManager.collectionAreaInfo.itemType && !isStacking && deliveryAreaManager.collectionAreaInfo.generatedItems.Count > 0)
                 {
-                    print("7");
-                    GetItem(deliveryAreaManager.collectionAreaInfo.generatedItems.Count, deliveryAreaManager.GetAndRemoveLastItem());
+                   
+                    GetItem(deliveryAreaManager.GetAndRemoveLastItem());
                 }
             }
         }
@@ -68,31 +69,36 @@ public class StackManager : MonoBehaviour
         }
     }
 
-    public void GetItem(int generatedItemCount, GameObject deliverredPackage)
+    public void GetItem(GameObject deliverredPackage)
     {
-        if (generatedItemCount <= 0) return;
         animator.SetLayerWeight(1, 1);
         isStacking = true;
         GameObject item = deliverredPackage;
-        StartCoroutine(StackItems(item));
+        StackItems(item);
     }
 
-    private IEnumerator StackItems(GameObject _item)
+    private void StackItems(GameObject _item)
     {
-        collectedItems.Add(_item);
+        int _index = collectedItems.Count;
+        Vector3 initPos = stackPos.position + Vector3.up * _index * gapOnYAxis;
         _item.transform.parent = null;
-        yield return new WaitForSeconds(0.2f);
-        isStacking = false;
+        _item.transform.DOJump(initPos, 2, 1, stackTime).OnComplete(() => {
+
+            collectedItems.Add(_item);
+            isStacking = false;
+        });
     }
 
 }
 [System.Serializable]
-public class CollectionAreaInfo{
-
+public class CollectionAreaInfo
+{
     public string name;
+
     public ItemTypes itemType;
+    public int bulletPerPackage_IfPackage;
+
     public GameObject itemPrefab;
-    public LayerMask collectableLayers;
     public float spawnedItemGap;
     public float timeToSpawn;
     public List<GameObject> generatedItems;

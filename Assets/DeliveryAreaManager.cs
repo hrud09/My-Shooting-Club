@@ -6,7 +6,6 @@ using DG.Tweening;
 public class DeliveryAreaManager : MonoBehaviour
 {
 
-    public int bulletPerPackage;
     public GameObject deliverySign;
     public Transform[] packageStackPos;
     public CollectionAreaInfo collectionAreaInfo;
@@ -30,6 +29,7 @@ public class DeliveryAreaManager : MonoBehaviour
             deliverredAmount++;
             GameObject newItem = Instantiate(collectionAreaInfo.itemPrefab, packageStackPos[currentItemIndex].position, Quaternion.identity);
             newItem.transform.SetParent(packageStackPos[currentItemIndex]);
+            newItem.GetComponent<Crate>().bulletCount = collectionAreaInfo.bulletPerPackage_IfPackage;
             collectionAreaInfo.generatedItems.Add(newItem);
             Reposition();
             yield return new WaitForSeconds(collectionAreaInfo.timeToSpawn);

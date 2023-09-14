@@ -6,13 +6,7 @@ using DG.Tweening;
 public class Crate : MonoBehaviour
 {
     private Rigidbody[] rigidbodies;
-
-    private void Awake()
-    {
-       
-       
-    }
-
+    public int bulletCount;
     public void Break() {
 
         for (int i = 0; i < transform.childCount; i++)
