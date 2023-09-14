@@ -30,7 +30,6 @@ public class BulletTray : MonoBehaviour
                     trayCover.transform.localScale = Vector3.zero;
                     trayCover.SetActive(true);
                     trayCover.transform.DOScale(initScale, 0.2f);
-                    
                 }
             }
         }
