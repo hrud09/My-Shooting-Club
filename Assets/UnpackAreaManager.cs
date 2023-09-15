@@ -28,30 +28,29 @@ public class UnpackAreaManager : MonoBehaviour
         float stackHeight = Mathf.Floor(index / disposPoses.Length);
         Vector3 newPosition = disposPoses[index % disposPoses.Length].position + Vector3.up * spawnedItemGap * stackHeight;
 
-        package.transform.DOJump(newPosition, 2, 1, unstackTime).OnComplete(() => {
+        package.transform.DOJump(newPosition, 2, 1, unstackTime).OnComplete(() =>
+        {
 
             isDisposing = false;
             disposedPackages.Add(package);
             package.transform.parent = dispossedParent;
-            package.transform.DOLocalRotate(Vector3.zero, unstackTime).OnComplete(()=> {
-            CheckForUnpacking();
+            package.transform.DOLocalRotate(Vector3.zero, unstackTime).OnComplete(() =>
+            {
+                CheckForUnpacking();
 
-        });
+            });
             Reposition();
         });
     }
     public void CheckForUnpacking() {
 
-        if (disposedPackages.Count > 0 && !isUnpacking) {
-
-            isUnpacking = true;
-            UnPack();
-        
+        if (disposedPackages.Count > 0 && !isUnpacking && bulletStackManager.bulletCapacityLeft > 0) {
+           UnPack();
         }
     }
     public void UnPack()
     {
-
+        isUnpacking = true;
         GameObject _selectedPackage = disposedPackages[disposedPackages.Count - 1];
         //Get bullet count from the crate
         int bulletCount = _selectedPackage.GetComponent<Crate>().bulletCount;
@@ -71,7 +70,7 @@ public class UnpackAreaManager : MonoBehaviour
 
     public bool IsInDisposableCondition()
     {
-        if (isDisposing)
+        if (isDisposing )
         {
             return false;
         }
