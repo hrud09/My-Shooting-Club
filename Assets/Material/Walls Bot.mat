@@ -16,8 +16,7 @@ Material:
   - TCP2_RIM_LIGHTING_LIGHTMASK
   m_InvalidKeywords:
   - TCP2_OUTLINE_CONST_SIZE
-  - TCP2_OUTLINE_TEXTURED_FRAGMENT
-  - TCP2_UV4_AS_NORMALS
+  - TCP2_TANGENT_AS_NORMALS
   - TCP2_UV_NORMALS_FULL
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -133,7 +132,7 @@ Material:
     - _MatCapMaskChannel: 0
     - _MatCapType: 0
     - _Metallic: 0
-    - _NormalsSource: 6
+    - _NormalsSource: 2
     - _NormalsUVType: 0
     - _OcclusionChannel: 0
     - _OcclusionStrength: 1
@@ -142,8 +141,8 @@ Material:
     - _OutlineMinWidth: 1
     - _OutlinePixelSizeType: 1
     - _OutlineTextureLOD: 5
-    - _OutlineTextureType: 2
-    - _OutlineWidth: 1.41
+    - _OutlineTextureType: 0
+    - _OutlineWidth: 10
     - _Parallax: 0.005
     - _QueueOffset: 0
     - _RampBands: 4

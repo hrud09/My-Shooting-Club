@@ -9,12 +9,10 @@ public class BulletSpawnManager : MonoBehaviour
     public UnpackAreaManager unpackAreaManager;
     public CollectionAreaInfo collectionAreaInfo;
     public Transform[] bulletMovementPos;
-    public int bulletCapacityLeft;
     public BulletTrayManager trayManager;
 
     public void GenerateBullet(int bulletCount)
     {
-        bulletCapacityLeft -= 10;
         StartCoroutine(GenerateBulletsDelay(bulletCount));
     }
 
@@ -31,12 +29,11 @@ public class BulletSpawnManager : MonoBehaviour
 
     void MoveObject(Transform bullet)
     {
-
         bullet.DOMove(bulletMovementPos[1].position, 1f).SetEase(Ease.Linear).OnComplete(() =>
         {
             bullet.GetComponent<Rigidbody>().isKinematic = false;
-            bullet.transform.parent = trayManager.currentFreeBulletTray.bulletParent;
-            trayManager.currentFreeBulletTray.StoreBullet(bullet.gameObject);
+            bullet.transform.parent = trayManager.bulletParent;
+            trayManager.StoreBullet(bullet.gameObject);
             unpackAreaManager.CheckForUnpacking();
         });
     }

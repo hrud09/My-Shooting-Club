@@ -677,7 +677,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2025661641745612976}
-  - component: {fileID: 1209762628332612603}
   m_Layer: 0
   m_Name: Bullet Tray
   m_TagString: Untagged
@@ -705,25 +704,6 @@ Transform:
   - {fileID: 7177611145920023931}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1209762628332612603
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5352824647660784980}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27a3613c922b1bb409df4e0d92caa52e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  trayFilled: 0
-  bulletCapacity: 0
-  currentBulletCount: 0
-  bulletsStored: []
-  trayCover: {fileID: 241912796451053638}
-  maxSign: {fileID: 7465599430178278012}
-  bulletParent: {fileID: 7177611145920023931}
 --- !u!1 &6293092942166377053
 GameObject:
   m_ObjectHideFlags: 0

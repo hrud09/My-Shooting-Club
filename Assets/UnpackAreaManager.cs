@@ -44,7 +44,7 @@ public class UnpackAreaManager : MonoBehaviour
     }
     public void CheckForUnpacking() {
 
-        if (disposedPackages.Count > 0 && !isUnpacking && bulletStackManager.bulletCapacityLeft > 0) {
+        if (disposedPackages.Count > 0 && !isUnpacking) {
            UnPack();
         }
     }

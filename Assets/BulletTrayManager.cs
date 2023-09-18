@@ -5,47 +5,60 @@ using DG.Tweening;
 
 public class BulletTrayManager : MonoBehaviour
 {
-    public GameObject bulletTrayPrefab;
-    public List<BulletTray> SpawnedBulletTrays;
-    public BulletTray currentFreeBulletTray;
-    public Transform[] bulletTrayPositions;
-    public BulletSpawnManager bulletSpawnManager;
-    // Update is called once per frame
-    void Awake()
+    public ItemTypes itemType;
+    public Transform bulletParent;
+    public Transform[] bulletStackPositions;
+    public List<GameObject> storedBullets;
+    public float spawnedItemGap;
+    public void StoreBullet(GameObject _bullet)
     {
-        bulletSpawnManager.bulletCapacityLeft = currentFreeBulletTray.bulletCapacity;
+        StartCoroutine(StoreBulletDelay(_bullet));
     }
+    // Update is called once per frame
 
-    public void TrackFreeBulletTrays(BulletTray filledTray)
+    IEnumerator StoreBulletDelay(GameObject bullet)
     {
-        currentFreeBulletTray = null;
+        Reposition();
+        float stackHeight = Mathf.Floor(storedBullets.Count / bulletStackPositions.Length);
+        Vector3 newPosition = bulletStackPositions[storedBullets.Count % bulletStackPositions.Length].position + Vector3.up * spawnedItemGap * stackHeight;
+        yield return new WaitForSeconds(1f);
+        bullet.GetComponent<Rigidbody>().isKinematic = true;
+        bullet.transform.DOJump(newPosition, 3, 1, 0.5f).OnComplete(()=> {
 
-        filledTray.transform.DOMove(bulletTrayPositions[1].position, 2f).SetDelay(1).OnComplete(() =>
-        {
-
-            GameObject tray = Instantiate(bulletTrayPrefab, bulletTrayPositions[0]);
-            currentFreeBulletTray = tray.GetComponent<BulletTray>();
-            SpawnedBulletTrays.Add(currentFreeBulletTray);
-            tray.transform.GetChild(0).localScale = Vector3.zero;
-            tray.SetActive(true);
-            tray.transform.GetChild(0).DOScale(Vector3.one * 1.6f, 0.3f).OnComplete(() =>
-            {
-                bulletSpawnManager.bulletCapacityLeft = currentFreeBulletTray.bulletCapacity;
-                bulletSpawnManager.unpackAreaManager.CheckForUnpacking();
-            });
+            storedBullets.Add(bullet);
+            Reposition();
         });
     }
 
     void Reposition()
     {
-        if (SpawnedBulletTrays.Count > 0)
+        if (storedBullets.Count > 0)
         {
-            for (int i = 0; i < disposedPackages.Count; i++)
+            for (int i = 0; i < storedBullets.Count; i++)
             {
-                float stackHeight = Mathf.Floor(i / disposPoses.Length);
-                Vector3 newPosition = disposPoses[i % disposPoses.Length].position + Vector3.up * spawnedItemGap * stackHeight;
-                disposedPackages[i].transform.position = newPosition;
+                float stackHeight = Mathf.Floor(i / bulletStackPositions.Length);
+                Vector3 newPosition = bulletStackPositions[i % bulletStackPositions.Length].position + Vector3.up * spawnedItemGap * stackHeight;
+                storedBullets[i].transform.parent = bulletStackPositions[i % bulletStackPositions.Length];
+                storedBullets[i].transform.localRotation = Quaternion.identity;
+              
+               storedBullets[i].transform.position = newPosition;
             }
+        }
+    }
+
+    public GameObject GetBullet()
+    {
+        if (storedBullets.Count > 0)
+        {
+            int lastIndex = storedBullets.Count - 1;
+            GameObject lastItem = storedBullets[lastIndex];
+            storedBullets.RemoveAt(lastIndex);
+            Reposition();
+            return lastItem;
+        }
+        else
+        {
+            return null;
         }
     }
 }
