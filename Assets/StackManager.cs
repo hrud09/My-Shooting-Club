@@ -114,21 +114,21 @@ public class StackManager : MonoBehaviour
                 GetItem(deliveryAreaManager.GetAndRemoveLastItem());
             }
         }
-        else if (other.gameObject.layer == 8 && unpackAreaManager && collectedItemType == ItemTypes.Package)
+        else if (other.gameObject.layer == 8 && collectedItemType == ItemTypes.Package)
         {
             if (collectedItems.Count > 0 && unpackAreaManager.IsInDisposableCondition())
             {
                 GameObject g = collectedItems[0];
                 collectedItems.Remove(g);
+                unpackAreaManager.DisposeAPackage(g);
                 if (collectedItems.Count == 0)
                 {
                     animator.SetLayerWeight(1, 0);
                     collectedItemType = ItemTypes.None;
                 }
-                unpackAreaManager.DisposeAPackage(g);
             }
         }
-        else if (other.gameObject.layer == 9 && trayManager)
+        else if (other.gameObject.layer == 9)
         {
             if (collectedItems.Count < maxItemCount && !isStacking)
             {
@@ -137,6 +137,7 @@ public class StackManager : MonoBehaviour
         }
         else if (other.gameObject.layer == 11 && !weaponManager.isReloading && collectedItemType == ItemTypes.Bullet)
         {
+            weaponManager.isReloading = true;
             weaponManager.CheckWeaponReload(GetABullet());
         }
     }
@@ -159,6 +160,10 @@ public class StackManager : MonoBehaviour
                 animator.SetLayerWeight(1, 0);
             }
             trayManager = null;
+        }
+        else if (other.gameObject.layer == 11)
+        {
+            weaponManager = null;
         }
     }
 
@@ -241,12 +246,14 @@ public class StackManager : MonoBehaviour
         {
             int lastIndex = collectedItems.Count - 1;
             GameObject lastItem = collectedItems[lastIndex];
-            collectedItems.RemoveAt(lastIndex);
+            collectedItems.Remove(lastItem);
             return lastItem;
         }
         else
         {
             collectedItemType = ItemTypes.None;
+            bulletTray.SetActive(false);
+            animator.SetLayerWeight(1, 0);
             return null;
         }
     }

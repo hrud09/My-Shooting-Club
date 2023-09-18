@@ -2,21 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using DG.Tweening;
 public class Weapon : MonoBehaviour
 {
     // Start is called before the first frame update
     public WeaponInfo weaponInfo;
     public bool isInUse;
-    /*public */
-    void Start()
+   
+    public void WeaponEmptyAction()
     {
-        
-    }
+        transform.DOJump(weaponInfo.weaponPosition.position, 2, 1, 0.5f).OnComplete(()=> {
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+            transform.parent = weaponInfo.weaponPosition;
+
+        });
     }
 }

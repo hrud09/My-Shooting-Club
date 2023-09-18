@@ -14,10 +14,9 @@ public class WeaponManager : MonoBehaviour
         if (!bullet) return;
         Weapon emptyWeapon = EmptyWeapon();
         if (emptyWeapon == null) return;
-        isReloading = true;
         currentWeaponTransform = emptyWeapon.gameObject.transform;
         bullet.transform.localScale = Vector3.one * 0.7f;
-        bullet.transform.DOJump(currentWeaponTransform.position, 3, 1, 0.3f).OnComplete(() =>
+        bullet.transform.DOJump(currentWeaponTransform.position, 3, 1, 0.1f).OnComplete(() =>
         {
             emptyWeapon.weaponInfo.currentBulletCount++;
             emptyWeapon.gameObject.transform.DOPunchScale(Vector3.one*1.02f,0.1f, 10);
@@ -45,7 +44,7 @@ public class WeaponInfo
 {
 
     public string ID;
-    public GameObject weaponVisual; 
+    public Transform weaponPosition; 
     public int bulletCapacity;
     public int currentBulletCount;
 
