@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class Customer : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
+    public CustomerInfo customerInfo; 
+    public CustomerManager customerManager;
+    public void SelectRandomTask()
     {
-        
+        int rand = Random.Range(0, 2);
+        if (rand == 0)
+        {
+            customerInfo.currentTask = CustomerTasks.GoingToClub;
+        }
+        else
+        {
+            customerInfo.currentTask = CustomerTasks.NormalMovement;
+        }
     }
 }
