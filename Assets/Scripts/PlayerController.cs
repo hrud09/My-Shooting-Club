@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
         if (moveDirection != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(moveDirection, Vector3.up);
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotationSpeed);
         }
 
         // Move the player using Rigidbody velocity

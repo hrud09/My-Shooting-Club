@@ -175,7 +175,8 @@ MonoBehaviour:
   bulletMovementPos:
   - {fileID: 4095689644736892851}
   - {fileID: 2893615186414061903}
-  bulletTrayManager: {fileID: 0}
+  bulletCapacityLeft: 0
+  trayManager: {fileID: 0}
 --- !u!1 &1581436984924794720
 GameObject:
   m_ObjectHideFlags: 0
@@ -192,7 +193,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &8748994265187662426
 Transform:
@@ -338,7 +339,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &6101560531886823506
 Transform:
@@ -349,8 +350,8 @@ Transform:
   m_GameObject: {fileID: 2780039930680912982}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.33798, y: 0, z: -0.7967404}
-  m_LocalScale: {x: 0.3342399, y: 1, z: 2.5935}
+  m_LocalPosition: {x: 0.37472, y: 0, z: -0.859}
+  m_LocalScale: {x: 0.38738114, y: 1, z: 3.5863225}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2112422956517917888}
@@ -538,7 +539,6 @@ MonoBehaviour:
   - {fileID: 6996251567848393726}
   - {fileID: 8098051002360069106}
   bulletStackManager: {fileID: 7836548835050937687}
-  trayManager: {fileID: 0}
 --- !u!1 &5178371037221622829
 GameObject:
   m_ObjectHideFlags: 0
@@ -784,7 +784,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &513710692729663376
 Transform:
@@ -900,7 +900,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &5056274622697937855
 Transform:
@@ -984,7 +984,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2112422956517917888
 Transform:

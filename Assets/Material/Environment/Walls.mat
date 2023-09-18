@@ -7,18 +7,12 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Coonveour
+  m_Name: Walls
   m_Shader: {fileID: 4800000, guid: 8d2bb70cbf9db8d4da26e15b26e74248, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords:
-  - TCP2_OUTLINE_CONST_SIZE
-  - TCP2_OUTLINE_TEXTURED_FRAGMENT
-  - TCP2_REFLECTIONS_FRESNEL
-  - TCP2_RIM_LIGHTING_LIGHTMASK
-  - TCP2_UV4_AS_NORMALS
-  - TCP2_UV_NORMALS_FULL
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -32,7 +26,7 @@ Material:
     m_TexEnvs:
     - _BaseMap:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
+        m_Scale: {x: 5, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
         m_Texture: {fileID: 0}
@@ -56,7 +50,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
+        m_Scale: {x: 5, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MatCapMask:
         m_Texture: {fileID: 0}
@@ -119,7 +113,7 @@ Material:
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
-    - _DirectIntensityOutline: 0.885
+    - _DirectIntensityOutline: 1
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EmissionChannel: 4
@@ -135,33 +129,33 @@ Material:
     - _MatCapMaskChannel: 0
     - _MatCapType: 0
     - _Metallic: 0
-    - _NormalsSource: 6
+    - _NormalsSource: 1
     - _NormalsUVType: 0
     - _OcclusionChannel: 0
     - _OcclusionStrength: 1
     - _OutlineLightingType: 0
     - _OutlineLightingTypeURP: 0
     - _OutlineMinWidth: 1
-    - _OutlinePixelSizeType: 1
+    - _OutlinePixelSizeType: 0
     - _OutlineTextureLOD: 5
-    - _OutlineTextureType: 2
-    - _OutlineWidth: 1.41
+    - _OutlineTextureType: 1
+    - _OutlineWidth: 0
     - _Parallax: 0.005
     - _QueueOffset: 0
     - _RampBands: 4
     - _RampBandsSmoothing: 0.1
     - _RampOffset: 0
     - _RampScale: 1
-    - _RampSmoothing: 0.1
-    - _RampThreshold: 0.75
+    - _RampSmoothing: 0.377
+    - _RampThreshold: 0.884
     - _RampType: 0
     - _ReceiveShadows: 1
     - _ReceiveShadowsOff: 1
     - _ReflectionMapType: 0
     - _ReflectionSmoothness: 0.5
     - _RenderingMode: 0
-    - _RimMax: 1
-    - _RimMin: 0.5
+    - _RimMax: 1.08
+    - _RimMin: 2
     - _Shininess: 0
     - _SingleIndirectColor: 0
     - _Smoothness: 0
@@ -194,19 +188,19 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
-    - _Color: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
-    - _EmissionColor: {r: 0.5283019, g: 0, b: 0, a: 1}
+    - _BaseColor: {r: 0.990566, g: 0.54846615, b: 0.042052314, a: 1}
+    - _Color: {r: 0.99056596, g: 0.54846615, b: 0.0420523, a: 1}
+    - _EmissionColor: {r: 0, g: 0.09566493, b: 0.9622642, a: 1}
     - _HColor: {r: 1, g: 1, b: 1, a: 1}
     - _MatCapColor: {r: 1, g: 1, b: 1, a: 1}
     - _OutlineColor: {r: 1, g: 1, b: 1, a: 1}
     - _ReflectionColor: {r: 1, g: 1, b: 1, a: 1}
     - _RimColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.5}
-    - _SColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
+    - _SColor: {r: 0.4245283, g: 0.4245283, b: 0.4245283, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _SpecularColor: {r: 0.75, g: 0.75, b: 0.75, a: 1}
   m_BuildTextureStacks: []
---- !u!114 &8783948642742867719
+--- !u!114 &1645871648436525272
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

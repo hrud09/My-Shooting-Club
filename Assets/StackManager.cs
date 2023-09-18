@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEditor;
+using UnityEngine.UI;
 
 public enum ItemTypes {
     Bullet,
@@ -21,6 +22,9 @@ public class StackManager : MonoBehaviour
 
     private Animator animator;
 
+    public GameObject filleImageGameobject;
+    public Image fillImage;
+    public Transform bulletTrayPos;
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -36,27 +40,28 @@ public class StackManager : MonoBehaviour
     }
 
 
+
+    DeliveryAreaManager deliveryAreaManager;
+    UnpackAreaManager unpackAreaManager;
+    BulletTrayManager trayManager;
+
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.layer == 7)
+        if (other.gameObject.layer == 7 && deliveryAreaManager)
         {
-            DeliveryAreaManager deliveryAreaManager = other.gameObject.GetComponentInParent<DeliveryAreaManager>();
             if (collectedItems.Count < maxItemCount && !isStacking)
             {
-                if (collectedItems.Count == 0)
-                {
-                    collectedItemType = deliveryAreaManager.collectionAreaInfo.itemType;
-                }
+             
                 if (collectedItemType == deliveryAreaManager.collectionAreaInfo.itemType && !isStacking && deliveryAreaManager.collectionAreaInfo.generatedItems.Count > 0)
                 {
-                   
+
                     GetItem(deliveryAreaManager.GetAndRemoveLastItem());
                 }
             }
         }
-        else if (other.gameObject.layer == 8)
+        else if (other.gameObject.layer == 8 && unpackAreaManager)
         {
-            UnpackAreaManager unpackAreaManager = other.gameObject.GetComponentInParent<UnpackAreaManager>();
+
             if (collectedItems.Count > 0 && unpackAreaManager.IsInDisposableCondition())
             {
                 GameObject g = collectedItems[collectedItems.Count - 1];
@@ -64,9 +69,57 @@ public class StackManager : MonoBehaviour
                 if (collectedItems.Count == 0) animator.SetLayerWeight(1, 0);
                 unpackAreaManager.DisposeAPackage(g);
             }
-           
+
+        }
+        else if (other.gameObject.layer == 9 && trayManager)
+        {
+            if (collectedItems.Count < maxItemCount)
+            {
+                
+            }
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == 7)
+        {
+            if (collectedItems.Count < maxItemCount && !isStacking)
+            {
+                deliveryAreaManager = other.gameObject.GetComponentInParent<DeliveryAreaManager>();
+            }
+            else
+            {
+                return;
+            }
+            if (collectedItems.Count == 0)
+            {
+                collectedItemType = deliveryAreaManager.collectionAreaInfo.itemType;
+            }
+        
+        }
+        else if (other.gameObject.layer == 8)
+        {
+            unpackAreaManager = other.gameObject.GetComponentInParent<UnpackAreaManager>();
+        }
+        else if (other.gameObject.layer == 9)
+        {
+
+
+          /*  if (collectedItems.Count == 0)
+            {
+                collectedItemType = trayManager.itemType;
+                trayManager = other.GetComponentInParent<BulletTrayManager>();
+
+            }
+            else if (collectedItemType == trayManager.itemType)
+            {
+
+                trayManager = other.GetComponentInParent<BulletTrayManager>();
+            }*/
+        }
+    }
+
 
     public void GetItem(GameObject deliverredPackage)
     {
