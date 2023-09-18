@@ -48,9 +48,10 @@ public class StackManager : MonoBehaviour
     public Image fillImage;
     public Transform bulletTrayPos;
 
-    DeliveryAreaManager deliveryAreaManager;
-    UnpackAreaManager unpackAreaManager;
-    BulletTrayManager trayManager;
+    [SerializeField] DeliveryAreaManager deliveryAreaManager;
+    [SerializeField] UnpackAreaManager unpackAreaManager;
+    [SerializeField] BulletTrayManager trayManager;
+    [SerializeField] WeaponManager weaponManager;
     public GameObject bulletTray;
 
     [SerializeField]
@@ -58,8 +59,6 @@ public class StackManager : MonoBehaviour
 
     [SerializeField]
     private List<CollectionAreaInfo> collectionAreaInfo; // List of collection area info
-
-    private bool stackActive; // Flag to track if stacking is active for the current item type
 
     private void Start()
     {
@@ -100,6 +99,10 @@ public class StackManager : MonoBehaviour
                 animator.SetLayerWeight(1, 1);
             }
         }
+        else if (other.gameObject.layer == 11)
+        {
+            weaponManager = other.GetComponentInParent<WeaponManager>();
+        }
     }
 
     private void OnTriggerStay(Collider other)
@@ -111,11 +114,11 @@ public class StackManager : MonoBehaviour
                 GetItem(deliveryAreaManager.GetAndRemoveLastItem());
             }
         }
-        else if (other.gameObject.layer == 8 && unpackAreaManager)
+        else if (other.gameObject.layer == 8 && unpackAreaManager && collectedItemType == ItemTypes.Package)
         {
             if (collectedItems.Count > 0 && unpackAreaManager.IsInDisposableCondition())
             {
-                GameObject g = collectedItems[collectedItems.Count - 1];
+                GameObject g = collectedItems[0];
                 collectedItems.Remove(g);
                 if (collectedItems.Count == 0)
                 {
@@ -131,6 +134,10 @@ public class StackManager : MonoBehaviour
             {
                 GetItem(trayManager.GetBullet());
             }
+        }
+        else if (other.gameObject.layer == 11 && !weaponManager.isReloading && collectedItemType == ItemTypes.Bullet)
+        {
+            weaponManager.CheckWeaponReload(GetABullet());
         }
     }
 
@@ -224,9 +231,23 @@ public class StackManager : MonoBehaviour
             if (capacityData.itemType == itemType)
             {
                 maxItemCount = capacityData.maxCapacity;
-                stackActive = true;
                 break;
             }
+        }
+    }
+    public GameObject GetABullet()
+    {
+        if (collectedItems.Count > 0)
+        {
+            int lastIndex = collectedItems.Count - 1;
+            GameObject lastItem = collectedItems[lastIndex];
+            collectedItems.RemoveAt(lastIndex);
+            return lastItem;
+        }
+        else
+        {
+            collectedItemType = ItemTypes.None;
+            return null;
         }
     }
 }
