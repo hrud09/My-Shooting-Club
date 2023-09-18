@@ -47,7 +47,7 @@ public class CustomerManager : MonoBehaviour
 
             if (freeTransform.Count == 0) break;
             Customer customer = _customerObject.GetComponent<Customer>();
-            customer.customerManager = this;
+            customer.customerManager = this; 
             customer.SelectRandomTask();
             spawnedCustomer.Add(customer);
         }
