@@ -12,10 +12,21 @@ public class WelcomeDeskManager : MonoBehaviour
     public TMP_Text customerName;
 
     public bool playerOnDesk;
-    public Customer currectCustomer;
+    public Customer currentCustomer;
+    public Transform[] exitWays;
+
+    public Button acceptButton;
+    public Button rejectButton;
+
+    private void Start()
+    {
+       
+    }
     public void SetCustomerInfoOnUi(Customer customer) {
 
-        currectCustomer = customer;
+        currentCustomer = customer;
+        rejectButton.onClick.RemoveListener(RejectTicket);
+        rejectButton.onClick.AddListener(RejectTicket);
         StartCoroutine(SetCustomerInfoOnUiDelay(customer.customerInfo));
     }
     public IEnumerator SetCustomerInfoOnUiDelay(CustomerInfo customerInfo)
@@ -31,9 +42,9 @@ public class WelcomeDeskManager : MonoBehaviour
         if (other.tag == "Player")
         {
             playerOnDesk = true;
-            if (currectCustomer)
+            if (currentCustomer)
             {
-                StartCoroutine(SetCustomerInfoOnUiDelay(currectCustomer.customerInfo));
+                StartCoroutine(SetCustomerInfoOnUiDelay(currentCustomer.customerInfo));
             }
         }   
     }
@@ -46,5 +57,19 @@ public class WelcomeDeskManager : MonoBehaviour
             customerOverview.SetActive(false);
             StopAllCoroutines();
         }
+    }
+
+    public void RejectTicket()
+    {
+      
+        currentCustomer.MoveAlongWaypoints(exitWays);
+        currentCustomer = null;
+
+    }
+
+    public void AcceptTicket() {
+
+        currentCustomer.MoveAlongWaypoints(exitWays);
+        currentCustomer = null;
     }
 }

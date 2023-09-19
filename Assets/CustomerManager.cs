@@ -84,6 +84,7 @@ public class CustomerManager : MonoBehaviour
         GameObject customerObject = Instantiate(customerPrefab, customerSpawnPos[randomIndex]);
         Customer customer = customerObject.GetComponent<Customer>();
 
+        customer.customerManager = this;
         spawnedCustomer.Add(customer);
         customersInLineCount++;
 
