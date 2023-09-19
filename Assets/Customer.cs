@@ -44,10 +44,9 @@ public class Customer : MonoBehaviour
         Tween moveTween = transform.DOMove(waypoint.position, dist / customerInfo.movementSpeed).OnComplete(() => {
             if (endPointSet)
             {
-                welcomeDeskManager.SetCustomerInfoOnUi(this);
-                print(Time.time + "Name: " + customerInfo.name);
+                welcomeDeskManager.SetCustomerInfoOnUi(this);  
             }
-            float _animationSpeed = 0;
+            float _animationSpeed = 1;
             Tween resetSpeedTween = DOTween.To(() => _animationSpeed, x => _animationSpeed = x, 0, 0.5f)
                 .OnUpdate(() => {
                     customerInfo.customerAnimator.SetFloat("Speed", _animationSpeed);
