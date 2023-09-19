@@ -26,7 +26,7 @@ public class WeaponManager : MonoBehaviour
 
     }
 
-    private Weapon EmptyWeapon()
+    public Weapon EmptyWeapon()
     {
         foreach (Weapon item in weapons)
         {

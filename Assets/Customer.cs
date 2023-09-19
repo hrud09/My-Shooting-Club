@@ -1,22 +1,50 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
+using DG.Tweening;
+using UnityEngine.Events;
 public class Customer : MonoBehaviour
 {
+    public CustomerInfo customerInfo;
+    public int currentWaypointIndex = 0;
+    public Transform meshParent;
 
-    public CustomerInfo customerInfo; 
-    public CustomerManager customerManager;
-    public void SelectRandomTask()
+    public void InitializeCustomer(CustomerInfo info)
     {
-        int rand = Random.Range(0, 2);
-        if (rand == 0)
+        for (int i = 0; i < meshParent.childCount; i++)
         {
-            customerInfo.currentTask = CustomerTasks.GoingToClub;
+            meshParent.GetChild(i).gameObject.SetActive(false);
         }
-        else
-        {
-            customerInfo.currentTask = CustomerTasks.NormalMovement;
-        }
+        meshParent.GetChild(Random.Range(0, meshParent.childCount)).gameObject.SetActive(true);
+        customerInfo.name = info.name;
+        customerInfo.movementSpeed = info.movementSpeed;
+        customerInfo.designation = info.designation;
     }
+
+    public void MoveToNextTargetPoint(Transform waypoint, WelcomeDeskManager welcomeDeskManager, bool endPointSet = false)
+    {
+        float animationSpeed = 0;
+        DOTween.To(() => animationSpeed, x => animationSpeed = x, 1, 0.2f)
+            .OnUpdate(() => {
+                customerInfo.customerAnimator.SetFloat("Speed", animationSpeed);
+            });
+        float dist = Vector2.Distance(transform.position, waypoint.position);
+        transform.DOLookAt(waypoint.position, 0.4f);
+        transform.DOMove(waypoint.position, dist / customerInfo.movementSpeed).OnComplete(()=> {
+
+
+            if (endPointSet)
+            {
+                welcomeDeskManager.SetCustomerInfoOnUi(this);
+                print(Time.time + "Name: " + customerInfo.name);
+            }
+            float _animationSpeed = 0;
+            DOTween.To(() => _animationSpeed, x => _animationSpeed = x, 0, 0.4f)
+                .OnUpdate(() => {
+                    customerInfo.customerAnimator.SetFloat("Speed", _animationSpeed);
+                   
+                });
+
+        });
+    }
+
+
 }

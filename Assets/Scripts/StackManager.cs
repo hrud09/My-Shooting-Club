@@ -135,7 +135,7 @@ public class StackManager : MonoBehaviour
                 GetItem(trayManager.GetBullet());
             }
         }
-        else if (other.gameObject.layer == 11 && !weaponManager.isReloading && collectedItemType == ItemTypes.Bullet)
+        else if (other.gameObject.layer == 11 && !weaponManager.isReloading && collectedItemType == ItemTypes.Bullet && weaponManager.EmptyWeapon() !=null)
         {
             weaponManager.isReloading = true;
             weaponManager.CheckWeaponReload(GetABullet());
