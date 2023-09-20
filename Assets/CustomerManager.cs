@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using System.Collections;
-
+using UnityEngine.AI;
 public class CustomerManager : MonoBehaviour
 {
     public GameObject customerPrefab;
@@ -13,13 +13,14 @@ public class CustomerManager : MonoBehaviour
     public float customerSpeed;
 
     public WelcomeDeskManager welcomeDeskManager;
+    public ShootingAreaManager shootingAreaManager;
+    public SofaManager sofaManager;
 
     public int customersInLineCount;
     public List<Customer> customersInLine = new List<Customer>();
 
     public int pooledCustomerCount;
     public List<Customer> spawnedCustomer = new List<Customer>();
-    public Customer currentCustomer;
     public AnimationCurve customerSpawnTimeCurve;
     private float timeUntilNextSpawn;
 
@@ -48,14 +49,13 @@ public class CustomerManager : MonoBehaviour
 
         Customer customer = GetACustomer();
         GameObject customerObject = customer.gameObject;
-           
+
         customer.customerManager = this;
         customer.currentWaypointIndex = 0;
         customersInLineCount++;
 
-        CustomerInfo info = new CustomerInfo();      
+        CustomerInfo info = new CustomerInfo();
         info.name = RandomName();
-        info.movementSpeed = customerSpeed;
         info.designation = RandomDesignation();
         customer.InitializeCustomer(info);
 
@@ -65,9 +65,9 @@ public class CustomerManager : MonoBehaviour
         float dist = Vector3.Distance(customerObject.transform.position, firstWaypoint.position);
         customerObject.transform.DOMove(firstWaypoint.position, dist / customerSpeed).SetEase(Ease.Linear).OnComplete(() => {
 
-            customer.MoveToNextTargetPoint(waypointsToClubEntry[customersInLine.Count], welcomeDeskManager, customersInLine.Count == 0);
+            customer.MoveToTargetPosition(waypointsToClubEntry[customersInLine.Count] , customersInLine.Count == 0, MovingTo.WelcomeDesk);
             customersInLine.Add(customer);
-           
+
         });
     }
 
@@ -75,30 +75,27 @@ public class CustomerManager : MonoBehaviour
 
     private Customer GetACustomer() {
 
-        if (spawnedCustomer.Count>0)
-        {
-            Customer electedCustomer = spawnedCustomer[0];
-            spawnedCustomer.Remove(electedCustomer);
-            electedCustomer.gameObject.SetActive(true);
-            return electedCustomer;
-        }
-        else
-        {
-            Spawn();
-            Customer electedCustomer = spawnedCustomer[0];
-            spawnedCustomer.Remove(electedCustomer);
-            electedCustomer.gameObject.SetActive(true);
-            return electedCustomer;
-        }
+        Customer electedCustomer;
+        if (spawnedCustomer.Count <= 0) Spawn();
 
+        electedCustomer = spawnedCustomer[0];
+        electedCustomer.gameObject.SetActive(true);
+        spawnedCustomer.Remove(electedCustomer);
+        return electedCustomer;
     }
+
+    public void ReturnCustomerPooledObject(Customer customer)
+    {
+        customer.gameObject.SetActive(false);
+        spawnedCustomer.Add(customer);
+    } 
     private IEnumerator SpawnPoolObjects(int _pooledCustomerCount)
     {
         for (int i = 0; i < _pooledCustomerCount; i++)
-        { 
+        {
             Spawn();
             yield return new WaitForEndOfFrame();
-        } 
+        }
     }
     private void Spawn()
     {
@@ -108,12 +105,14 @@ public class CustomerManager : MonoBehaviour
         customerObject.SetActive(false);
         spawnedCustomer.Add(customer);
     }
+
+
+
     public void RemoveCustomerFromLine(Customer customer)
     {
         customersInLine.Remove(customer);
         if (customersInLine.Count > 0)
         {
-            currentCustomer = customersInLine[0];
             customersInLineCount -= 1;
             Invoke("UpdateCustomerWaypoints", 1);
         }
@@ -122,7 +121,7 @@ public class CustomerManager : MonoBehaviour
     {
         for (int i = 0; i < customersInLine.Count; i++)
         {
-            customersInLine[i].MoveToNextTargetPoint(waypointsToClubEntry[i], welcomeDeskManager, i == 0);
+            customersInLine[i].MoveToTargetPosition(waypointsToClubEntry[i], i == 0, MovingTo.WelcomeDesk);
         }
     }
     private string RandomDesignation()
@@ -153,6 +152,17 @@ public class CustomerManager : MonoBehaviour
 
         return randomName;
     }
+
+    public Transform GetDestinationForCustomers()
+    {
+        if (shootingAreaManager.HasFreeShootingRange()) return shootingAreaManager.GetFreeShootinRange(); 
+        else return sofaManager.GetFreeSittingPostion();
+    }
+    public bool HasFreePosition()
+    {
+        if (shootingAreaManager.HasFreeShootingRange()) return true;
+        return sofaManager.HasFreeSit();
+    }
 }
 
 [System.Serializable]
@@ -160,11 +170,7 @@ public class CustomerInfo
 {
     public string name;
     public string designation;
-    public bool hasTicket;
-    public bool isFree;
-    public bool isShooting;
     public int shootingRoundCount;
-    public float worthMoney;
-    public float movementSpeed;
+    public NavMeshAgent agent;
     public Animator customerAnimator;
 }

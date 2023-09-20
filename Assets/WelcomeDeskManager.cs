@@ -13,7 +13,7 @@ public class WelcomeDeskManager : MonoBehaviour
 
     public bool playerOnDesk;
     public Customer currentCustomer;
-    public Transform[] exitWays;
+    public Transform exitWay;
 
     public Button acceptButton;
     public Button rejectButton;
@@ -27,6 +27,9 @@ public class WelcomeDeskManager : MonoBehaviour
         currentCustomer = customer;
         rejectButton.onClick.RemoveListener(RejectTicket);
         rejectButton.onClick.AddListener(RejectTicket);
+        acceptButton.onClick.RemoveListener(AcceptTicket);
+        acceptButton.onClick.AddListener(AcceptTicket);
+
         StartCoroutine(SetCustomerInfoOnUiDelay(customer.customerInfo));
     }
     public IEnumerator SetCustomerInfoOnUiDelay(CustomerInfo customerInfo)
@@ -34,12 +37,14 @@ public class WelcomeDeskManager : MonoBehaviour
         customerName.text = customerInfo.name;
         customerDesignation.text = customerInfo.designation;
         yield return new WaitUntil(()=> playerOnDesk);
-        customerOverview.SetActive(true);
+        if(customerManager.HasFreePosition()) customerOverview.SetActive(true);
+        else customerOverview.SetActive(false);
+
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player")
+        if (other.tag == "Player" && customerManager.HasFreePosition())
         {
             playerOnDesk = true;
             if (currentCustomer)
@@ -50,7 +55,6 @@ public class WelcomeDeskManager : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
-
         if (other.tag == "Player")
         {
             playerOnDesk = false;
@@ -61,15 +65,25 @@ public class WelcomeDeskManager : MonoBehaviour
 
     public void RejectTicket()
     {
-      
-        currentCustomer.MoveAlongWaypoints(exitWays);
+        customerManager.RemoveCustomerFromLine(currentCustomer);
+        currentCustomer.RejectionSequence(exitWay);
         currentCustomer = null;
-
     }
 
     public void AcceptTicket() {
 
-        currentCustomer.MoveAlongWaypoints(exitWays);
+        //currentCustomer.MoveAlongWaypoints(exitWays);
+        customerManager.RemoveCustomerFromLine(currentCustomer);
+        currentCustomer.MoveToTargetPosition(customerManager.GetDestinationForCustomers(), true, MovingTo.ShootingRange);
         currentCustomer = null;
     }
+}
+
+public enum MovingTo { 
+
+    WelcomeDesk,
+    ShootingRange,
+    Sofa,
+    ExitFromWelcomeDesk,
+    ExitFromShootingRange
 }
