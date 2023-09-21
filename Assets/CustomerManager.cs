@@ -155,11 +155,6 @@ public class CustomerManager : MonoBehaviour
         return randomName;
     }
 
-    public Transform GetDestinationForCustomers()
-    {
-        if (shootingAreaManager.HasFreeShootingRange()) return shootingAreaManager.GetFreeShootinRange(); 
-        else return sofaManager.GetFreeSittingPostion();
-    }
     public bool HasFreePosition()
     {
         if (shootingAreaManager.HasFreeShootingRange()) return true;

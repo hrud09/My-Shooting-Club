@@ -12,9 +12,7 @@ public class Customer : MonoBehaviour
     public Transform meshParent;
     public CustomerManager customerManager;
     Transform exitPointFromDesk;
-
     private Tween animationTween;
-
     public ShootingRange shootingRange;
     public Weapon currentWeapon;
     public void InitializeCustomer(CustomerInfo info)
@@ -40,7 +38,9 @@ public class Customer : MonoBehaviour
             StartCoroutine(PostArivalAction(destination.position, () =>
             {
                 customerManager.welcomeDeskManager.SetCustomerInfoOnUi(this);
-
+                Vector3 lookAtPos = customerManager.welcomeDeskManager.transform.position;
+                lookAtPos.y = transform.position.y;
+                transform.DOLookAt(lookAtPos, 0.1f);
             }));
         }
         else if (movingTo == MovingTo.ExitFromWelcomeDesk)
@@ -70,19 +70,34 @@ public class Customer : MonoBehaviour
         {
             StartCoroutine(PostArivalAction(destination.position, () => {
 
+                customerInfo.shootingIsOver = false;
                 customerManager.ReturnCustomerPooledObject(this);
 
             }));
         }
+        else if (movingTo == MovingTo.Sofa)
+        {
+            StartCoroutine(PostArivalAction(destination.position, () => {
+
+                //Sit
+                StartCoroutine(WaitUntilShootingRangeIsEmpty());
+            }));
+        }
     }
 
+    private IEnumerator WaitUntilShootingRangeIsEmpty()
+    {
+        yield return new WaitUntil(()=> customerManager.shootingAreaManager.HasFreeShootingRange());
+        MoveToTargetPosition(customerManager.shootingAreaManager.GetFreeShootinRange(), MovingTo.ShootingRange);
+    }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == 12)
+        if (other.gameObject.layer == 12 && !customerInfo.shootingIsOver)
         {
             customerInfo.isInsideShootingRange = true;
             shootingRange = other.gameObject.GetComponentInParent<ShootingRange>();
+            transform.DOLocalRotate(Vector3.back * 90, 0.3f);
         }
     }
 
@@ -156,7 +171,7 @@ public class Customer : MonoBehaviour
     public void AnimationControll(float speed)
     {
         float _speed = 0;
-        animationTween = DOTween.To(() => _speed, x => _speed = x, speed, 0.2f)
+        animationTween = DOTween.To(() => _speed, x => _speed = x, speed, 0.4f)
             .OnUpdate(() => {
                 customerInfo.customerAnimator.SetFloat("Speed", _speed);
             });
@@ -165,8 +180,10 @@ public class Customer : MonoBehaviour
     )
     {
         yield return new WaitUntil(() => Vector3.Distance(transform.position, destination) <= 0.1f);
-        postArivalAction.Invoke();
         AnimationControll(0);
+        yield return new WaitUntil(() => Vector3.Distance(transform.position, destination) <= 0.05f);
+        postArivalAction.Invoke();
+       
     }
     public void RejectionSequence(Transform finalPointAfterExit)
     {

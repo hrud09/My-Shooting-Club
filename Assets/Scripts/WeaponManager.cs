@@ -26,6 +26,18 @@ public class WeaponManager : MonoBehaviour
 
     }
 
+    public bool HasLoadedGun()
+    {
+        for (int i = 0; i < weapons.Length; i++)
+        {
+            if (weapons[i].weaponInfo.currentBulletCount > 0)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public Weapon EmptyWeapon()
     {
         foreach (Weapon item in weapons)
