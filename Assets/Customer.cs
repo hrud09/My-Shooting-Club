@@ -33,7 +33,16 @@ public class Customer : MonoBehaviour
         AnimationControll(1);
         customerInfo.agent.SetDestination(destination.position);
 
-        if (movingTo == MovingTo.WelcomeDesk)
+
+        if (movingTo == MovingTo.CustomerLine)
+        {
+            StartCoroutine(PostArivalAction(destination.position, () => {
+
+
+
+            }));
+        }
+        else if (movingTo == MovingTo.WelcomeDesk)
         {
             StartCoroutine(PostArivalAction(destination.position, () =>
             {
@@ -51,6 +60,14 @@ public class Customer : MonoBehaviour
 
             }));
         }
+        else if (movingTo == MovingTo.Sofa)
+        {
+            StartCoroutine(PostArivalAction(destination.position, () => {
+
+                //Sit
+                customerManager.customersInSofa.Add(this);
+            }));
+        }
         else if (movingTo == MovingTo.ShootingRange)
         {
             StartCoroutine(PostArivalAction(destination.position, () =>
@@ -58,53 +75,32 @@ public class Customer : MonoBehaviour
                 customerInfo.readyToStartShootingSequence = true;
             }));
         }
-        else if (movingTo == MovingTo.CustomerLine)
-        {
-            StartCoroutine(PostArivalAction(destination.position, ()=> { 
-            
-
-
-            }));
-        }
+   
         else if (movingTo == MovingTo.ExitFromShootingRange)
         {
-            StartCoroutine(PostArivalAction(destination.position, () => {
+
+           shootingRange.isOccupied = false;
+           customerManager.customersInSofa.Remove(this);
+
+           StartCoroutine(PostArivalAction(destination.position, () => {
 
                 customerInfo.shootingIsOver = false;
                 customerManager.ReturnCustomerPooledObject(this);
+               
 
             }));
         }
-        else if (movingTo == MovingTo.Sofa)
-        {
-            StartCoroutine(PostArivalAction(destination.position, () => {
-
-                //Sit
-                StartCoroutine(WaitUntilShootingRangeIsEmpty());
-            }));
-        }
+ 
     }
 
-    private IEnumerator WaitUntilShootingRangeIsEmpty()
-    {
-        yield return new WaitUntil(()=> customerManager.shootingAreaManager.HasFreeShootingRange());
-        MoveToTargetPosition(customerManager.shootingAreaManager.GetFreeShootinRange(), MovingTo.ShootingRange);
-    }
-
+  
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == 12 && !customerInfo.shootingIsOver)
+        if (other.gameObject.layer == 12 && !customerInfo.shootingIsOver && customerInfo.readyToStartShootingSequence)
         {
             customerInfo.isInsideShootingRange = true;
             shootingRange = other.gameObject.GetComponentInParent<ShootingRange>();
             transform.DOLocalRotate(Vector3.back * 90, 0.3f);
-        }
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.gameObject.layer == 12 && customerInfo.readyToStartShootingSequence)
-        {
             if (!customerInfo.hasWeapon)
             {
                 Weapon weapon = shootingRange.weaponManager.LoadedWeapon();
@@ -114,27 +110,28 @@ public class Customer : MonoBehaviour
                 weapon.isInUse = true;
                 Vector3 targetLookAt = weapon.gameObject.transform.position;
                 targetLookAt.y = transform.position.y;
-                transform.DOLookAt(targetLookAt, 0.4f).OnComplete(()=> {
+                transform.DOLookAt(targetLookAt, 0.4f).OnComplete(() => {
 
-                    weapon.gameObject.transform.DOJump(customerInfo.weaponPos.position, 2, 1, 0.2f).OnComplete(()=> {
+                    weapon.gameObject.transform.DOJump(customerInfo.weaponPos.position, 2, 1, 0.2f).OnComplete(() => {
 
                         weapon.gameObject.transform.parent = customerInfo.weaponPos;
                         weapon.gameObject.transform.localRotation = Quaternion.identity;
                         weapon.gameObject.transform.localPosition = Vector3.zero;
                         weapon.gameObject.transform.localScale = Vector3.one;
-                        transform.DOLocalRotate(Vector3.zero, 0.3f).OnComplete(()=> {
+                        transform.DOLocalRotate(Vector3.zero, 0.3f).OnComplete(() => {
 
                             if (!customerInfo.isShooting && !customerInfo.shootingIsOver) StartShooting();
 
                         });
-                      
+
                     });
 
                 });
             }
-          
+
         }
     }
+
 
     private void StartShooting()
     {
@@ -153,6 +150,7 @@ public class Customer : MonoBehaviour
             currentWeapon.WeaponEmptyAction();
             customerInfo.customerAnimator.SetBool("IsShooting", false);
             MoveToTargetPosition(customerManager.firstWaypoint, MovingTo.ExitFromShootingRange);
+            customerManager.SendNextCustomerToShoot();
         }
     }
     private void OnTriggerExit(Collider other)

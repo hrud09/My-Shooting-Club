@@ -163,6 +163,11 @@ public class StackManager : MonoBehaviour
         }
         else if (other.gameObject.layer == 11)
         {
+            if (collectedItems.Count <= 0)
+            {
+                bulletTray.SetActive(false);
+                animator.SetLayerWeight(1, 0);
+            }
             weaponManager = null;
         }
     }

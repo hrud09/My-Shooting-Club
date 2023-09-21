@@ -168,7 +168,7 @@ GameObject:
   - component: {fileID: 5223004995813303499}
   - component: {fileID: 5922090918191374941}
   m_Layer: 9
-  m_Name: Tray Collection Pos
+  m_Name: Bullet Collection Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

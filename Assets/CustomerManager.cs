@@ -18,6 +18,7 @@ public class CustomerManager : MonoBehaviour
 
     public int customersInLineCount;
     public List<Customer> customersInLine = new List<Customer>();
+    public List<Customer> customersInSofa = new List<Customer>();
 
     public int pooledCustomerCount;
     public List<Customer> spawnedCustomer = new List<Customer>();
@@ -73,7 +74,13 @@ public class CustomerManager : MonoBehaviour
     }
 
 
+    public void SendNextCustomerToShoot()
+    {
+        Customer c = customersInSofa[0];
+        if (shootingAreaManager.HasFreeShootingRange()) c.MoveToTargetPosition(shootingAreaManager.GetFreeShootinRange(), MovingTo.ShootingRange);
 
+
+    }
     private Customer GetACustomer() {
 
         Customer electedCustomer;
