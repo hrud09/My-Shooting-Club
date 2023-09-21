@@ -9,4 +9,6 @@ public class ShootingRange : MonoBehaviour
     public bool isOccupied;
     public bool isOutOfService;
     public Transform shootingSpot;
+    public WeaponManager weaponManager;
+    public GameObject targetSheet;
 }

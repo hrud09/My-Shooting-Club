@@ -37,6 +37,18 @@ public class WeaponManager : MonoBehaviour
         }
         return null;
     }
+
+    public Weapon LoadedWeapon()
+    {
+        foreach (Weapon item in weapons)
+        {
+            if (item.weaponInfo.bulletCapacity == item.weaponInfo.currentBulletCount && !item.isInUse)
+            {
+                return item;
+            }
+        }
+        return null;
+    }
 }
 
 [System.Serializable]
@@ -44,7 +56,7 @@ public class WeaponInfo
 {
 
     public string ID;
-    public Transform weaponPosition; 
+    public Transform weaponPositionTransform; 
     public int bulletCapacity;
     public int currentBulletCount;
 

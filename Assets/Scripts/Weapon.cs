@@ -11,10 +11,15 @@ public class Weapon : MonoBehaviour
    
     public void WeaponEmptyAction()
     {
-        transform.DOJump(weaponInfo.weaponPosition.position, 2, 1, 0.5f).OnComplete(()=> {
+        transform.DOJump(weaponInfo.weaponPositionTransform.position, 2, 1, 0.5f).OnComplete(()=> {
 
-            transform.parent = weaponInfo.weaponPosition;
-
+            isInUse = false;
+          
+            transform.parent = weaponInfo.weaponPositionTransform;
+            transform.localScale = Vector3.one;
+            transform.DOLocalRotate(Vector3.zero, 0.2f);
         });
     }
+
+
 }

@@ -625,7 +625,8 @@ Transform:
   m_LocalPosition: {x: 1.7763568e-17, y: 0.22498214, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 4460287882583879359}
   m_Father: {fileID: 4275021499571497282}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4488135852656635042
@@ -1049,13 +1050,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   customerInfo:
     name: John
+    isInsideShootingRange: 0
+    readyToStartShootingSequence: 0
+    hasWeapon: 0
+    isShooting: 0
+    shootingIsOver: 0
+    weaponPos: {fileID: 4460287882583879359}
     designation: Doctor
-    shootingRoundCount: 3
     agent: {fileID: 5154308228826607572}
     customerAnimator: {fileID: 3722037538958858698}
   currentWaypointIndex: 0
   meshParent: {fileID: 4188515546315283790}
   customerManager: {fileID: 0}
+  shootingRange: {fileID: 0}
+  currentWeapon: {fileID: 0}
 --- !u!195 &5154308228826607572
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1070,7 +1078,7 @@ NavMeshAgent:
   m_Acceleration: 10
   avoidancePriority: 50
   m_AngularSpeed: 1000
-  m_StoppingDistance: 0.01
+  m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -1110,6 +1118,37 @@ Transform:
   - {fileID: 1156240715518778001}
   m_Father: {fileID: 8732229148745431737}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7361982132853872474
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4460287882583879359}
+  m_Layer: 0
+  m_Name: Weapon Position
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4460287882583879359
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7361982132853872474}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.6513271, y: -0.0036914786, z: 0.056643553, w: 0.75667095}
+  m_LocalPosition: {x: 0.021, y: 0.178, z: -0.067}
+  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8745801130430620250}
+  m_LocalEulerAnglesHint: {x: -80.151, y: -27.648, z: 31.955}
 --- !u!1 &7467602690367750751
 GameObject:
   m_ObjectHideFlags: 0

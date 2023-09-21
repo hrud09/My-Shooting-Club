@@ -65,7 +65,8 @@ public class CustomerManager : MonoBehaviour
         float dist = Vector3.Distance(customerObject.transform.position, firstWaypoint.position);
         customerObject.transform.DOMove(firstWaypoint.position, dist / customerSpeed).SetEase(Ease.Linear).OnComplete(() => {
 
-            customer.MoveToTargetPosition(waypointsToClubEntry[customersInLine.Count] , customersInLine.Count == 0, MovingTo.WelcomeDesk);
+            if(customersInLine.Count == 0) customer.MoveToTargetPosition(waypointsToClubEntry[customersInLine.Count], MovingTo.WelcomeDesk);
+            else customer.MoveToTargetPosition(waypointsToClubEntry[customersInLine.Count], MovingTo.CustomerLine);
             customersInLine.Add(customer);
 
         });
@@ -121,7 +122,8 @@ public class CustomerManager : MonoBehaviour
     {
         for (int i = 0; i < customersInLine.Count; i++)
         {
-            customersInLine[i].MoveToTargetPosition(waypointsToClubEntry[i], i == 0, MovingTo.WelcomeDesk);
+            if(i == 0) customersInLine[i].MoveToTargetPosition(waypointsToClubEntry[i], MovingTo.WelcomeDesk);
+            else customersInLine[i].MoveToTargetPosition(waypointsToClubEntry[i], MovingTo.CustomerLine);
         }
     }
     private string RandomDesignation()
@@ -169,8 +171,24 @@ public class CustomerManager : MonoBehaviour
 public class CustomerInfo
 {
     public string name;
+    public bool isInsideShootingRange;
+    public bool readyToStartShootingSequence;
+    public bool hasWeapon;
+    public bool isShooting;
+    public bool shootingIsOver;
+    public Transform weaponPos;
     public string designation;
-    public int shootingRoundCount;
     public NavMeshAgent agent;
     public Animator customerAnimator;
+}
+public enum MovingTo
+{
+
+    StartingPosition,
+    CustomerLine,
+    WelcomeDesk,
+    ShootingRange,
+    Sofa,
+    ExitFromWelcomeDesk,
+    ExitFromShootingRange
 }

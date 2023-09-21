@@ -74,16 +74,8 @@ public class WelcomeDeskManager : MonoBehaviour
 
         //currentCustomer.MoveAlongWaypoints(exitWays);
         customerManager.RemoveCustomerFromLine(currentCustomer);
-        currentCustomer.MoveToTargetPosition(customerManager.GetDestinationForCustomers(), true, MovingTo.ShootingRange);
+        currentCustomer.MoveToTargetPosition(customerManager.GetDestinationForCustomers(), MovingTo.ShootingRange);
         currentCustomer = null;
     }
 }
 
-public enum MovingTo { 
-
-    WelcomeDesk,
-    ShootingRange,
-    Sofa,
-    ExitFromWelcomeDesk,
-    ExitFromShootingRange
-}
