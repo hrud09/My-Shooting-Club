@@ -5,21 +5,27 @@ using DG.Tweening;
 
 public class WeaponManager : MonoBehaviour
 {
-    public Weapon[] weapons;
+    public Weapon weapon;
     public Transform currentWeaponTransform;
     public bool isReloading;
-
+    public CustomerManager customerManager;
+    ShootingRange shootingRange;
+    public bool hasLoadedGun;
+    private void Start()
+    {
+        shootingRange = GetComponent<ShootingRange>();
+    }
     public void CheckWeaponReload(GameObject bullet)
     {
         if (!bullet) return;
-        Weapon emptyWeapon = EmptyWeapon();
-        if (emptyWeapon == null) return;
-        currentWeaponTransform = emptyWeapon.gameObject.transform;
+        if (HasLoadedGun()) return;
+        currentWeaponTransform = weapon.gameObject.transform;
         bullet.transform.localScale = Vector3.one * 0.7f;
         bullet.transform.DOJump(currentWeaponTransform.position, 3, 1, 0.1f).OnComplete(() =>
         {
-            emptyWeapon.weaponInfo.currentBulletCount++;
-            emptyWeapon.gameObject.transform.DOPunchScale(Vector3.one*1.02f,0.1f, 10);
+            weapon.weaponInfo.currentBulletCount++;
+            if (!shootingRange.isOccupied && weapon.weaponInfo.currentBulletCount >= weapon.weaponInfo.bulletCapacity) customerManager.SendNextCustomerToShoot();
+            weapon.gameObject.transform.DOPunchScale(Vector3.one * 1.02f,0.1f, 5);
             Destroy(bullet);
             isReloading = false;
         });
@@ -28,38 +34,9 @@ public class WeaponManager : MonoBehaviour
 
     public bool HasLoadedGun()
     {
-        for (int i = 0; i < weapons.Length; i++)
-        {
-            if (weapons[i].weaponInfo.currentBulletCount > 0)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public Weapon EmptyWeapon()
-    {
-        foreach (Weapon item in weapons)
-        {
-            if (item.weaponInfo.bulletCapacity > item.weaponInfo.currentBulletCount && !item.isInUse)
-            {
-                return item;
-            }
-        }
-        return null;
-    }
-
-    public Weapon LoadedWeapon()
-    {
-        foreach (Weapon item in weapons)
-        {
-            if (item.weaponInfo.bulletCapacity == item.weaponInfo.currentBulletCount && !item.isInUse)
-            {
-                return item;
-            }
-        }
-        return null;
+        bool _hasLoadedGun = (weapon.weaponInfo.currentBulletCount == weapon.weaponInfo.bulletCapacity);
+        hasLoadedGun = _hasLoadedGun;
+        return _hasLoadedGun;
     }
 }
 

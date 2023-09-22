@@ -16,7 +16,7 @@ public class ShootingRange : MonoBehaviour
 
     private void Update()
     {
-        if (!weaponManager.HasLoadedGun() && !outOfAmmoSign.activeInHierarchy)
+        if (!weaponManager.HasLoadedGun() && !outOfAmmoSign.activeInHierarchy && !isOccupied)
         {
             outOfAmmoSign.transform.localScale = Vector3.zero;
             outOfAmmoSign.SetActive(true);
@@ -24,6 +24,7 @@ public class ShootingRange : MonoBehaviour
         }
         else if (weaponManager.HasLoadedGun() && outOfAmmoSign.activeInHierarchy)
         {
+            
             outOfAmmoSign.transform.DOScale(Vector3.zero, 0.4f).OnComplete(()=> {
 
                 outOfAmmoSign.SetActive(false);
@@ -31,7 +32,5 @@ public class ShootingRange : MonoBehaviour
 
 
         }
-
-        if (weaponManager.HasLoadedGun()) print("Loaded Gun Found");
     }
 }

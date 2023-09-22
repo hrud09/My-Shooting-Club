@@ -72,7 +72,7 @@ public class Customer : MonoBehaviour
         {
             StartCoroutine(PostArivalAction(destination.position, () =>
             {
-                customerInfo.readyToStartShootingSequence = true;
+                
             }));
         }
    
@@ -80,8 +80,7 @@ public class Customer : MonoBehaviour
         {
 
            shootingRange.isOccupied = false;
-           customerManager.customersInSofa.Remove(this);
-
+           shootingRange.outOfAmmoSign.SetActive(true);
            StartCoroutine(PostArivalAction(destination.position, () => {
 
                 customerInfo.shootingIsOver = false;
@@ -96,15 +95,16 @@ public class Customer : MonoBehaviour
   
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == 12 && !customerInfo.shootingIsOver && customerInfo.readyToStartShootingSequence)
+        if (other.gameObject.layer == 12 && !customerInfo.shootingIsOver)
         {
             customerInfo.isInsideShootingRange = true;
             shootingRange = other.gameObject.GetComponentInParent<ShootingRange>();
             transform.DOLocalRotate(Vector3.back * 90, 0.3f);
             if (!customerInfo.hasWeapon)
             {
-                Weapon weapon = shootingRange.weaponManager.LoadedWeapon();
-                if (!weapon) return;
+                if (!shootingRange.weaponManager.HasLoadedGun()) return;
+                Weapon weapon = shootingRange.weaponManager.weapon;
+               
                 customerInfo.hasWeapon = true;
                 currentWeapon = weapon;
                 weapon.isInUse = true;
@@ -158,7 +158,6 @@ public class Customer : MonoBehaviour
         if (other.gameObject.layer == 12)
         {
             customerInfo.isInsideShootingRange = false;
-            customerInfo.readyToStartShootingSequence = false;
             customerInfo.hasWeapon = false;
             currentWeapon = null;
             shootingRange = null;

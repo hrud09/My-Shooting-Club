@@ -76,9 +76,13 @@ public class CustomerManager : MonoBehaviour
 
     public void SendNextCustomerToShoot()
     {
+        if (customersInSofa.Count == 0) return;
         Customer c = customersInSofa[0];
-        if (shootingAreaManager.HasFreeShootingRange()) c.MoveToTargetPosition(shootingAreaManager.GetFreeShootinRange(), MovingTo.ShootingRange);
+        if (shootingAreaManager.HasFreeShootingRange()) {
 
+            customersInSofa.Remove(c);
+            c.MoveToTargetPosition(shootingAreaManager.GetFreeShootinRange(), MovingTo.ShootingRange);
+        }
 
     }
     private Customer GetACustomer() {
@@ -174,7 +178,6 @@ public class CustomerInfo
 {
     public string name;
     public bool isInsideShootingRange;
-    public bool readyToStartShootingSequence;
     public bool hasWeapon;
     public bool isShooting;
     public bool shootingIsOver;
