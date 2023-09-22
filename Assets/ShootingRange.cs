@@ -16,7 +16,7 @@ public class ShootingRange : MonoBehaviour
 
     private void Update()
     {
-        if (!weaponManager.HasLoadedGun() && !outOfAmmoSign.activeInHierarchy && !isOccupied)
+        if (!weaponManager.HasLoadedGun() && !outOfAmmoSign.activeInHierarchy && !isOccupied )
         {
             outOfAmmoSign.transform.localScale = Vector3.zero;
             outOfAmmoSign.SetActive(true);
