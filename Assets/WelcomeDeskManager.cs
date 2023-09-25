@@ -7,7 +7,6 @@ public class WelcomeDeskManager : MonoBehaviour
 {
     // Start is called before the first frame update
     public CustomerManager customerManager;
-    public GameObject customerOverview;
     public TMP_Text customerDesignation;
     public TMP_Text customerName;
 
@@ -18,6 +17,8 @@ public class WelcomeDeskManager : MonoBehaviour
     public Button acceptButton;
     public Button rejectButton;
 
+
+    public Animator customerOverviewAnimator;
     private void Start()
     {
        
@@ -37,8 +38,8 @@ public class WelcomeDeskManager : MonoBehaviour
         customerName.text = customerInfo.name;
         customerDesignation.text = customerInfo.designation;
         yield return new WaitUntil(()=> playerOnDesk);
-        if(customerManager.HasFreePosition()) customerOverview.SetActive(true);
-        else customerOverview.SetActive(false);
+        if(customerManager.HasFreePosition()) customerOverviewAnimator.Play("Entry");
+        else customerOverviewAnimator.Play("Exit");
 
     }
 
@@ -58,13 +59,17 @@ public class WelcomeDeskManager : MonoBehaviour
         if (other.tag == "Player")
         {
             playerOnDesk = false;
-            customerOverview.SetActive(false);
+            if (currentCustomer) { 
+                customerOverviewAnimator.Play("Exit");
+            }
+           
             StopAllCoroutines();
         }
     }
 
     public void RejectTicket()
     {
+        customerOverviewAnimator.Play("Exit");
         customerManager.RemoveCustomerFromLine(currentCustomer);
         currentCustomer.RejectionSequence(exitWay);
         currentCustomer = null;
@@ -73,6 +78,7 @@ public class WelcomeDeskManager : MonoBehaviour
     public void AcceptTicket() {
 
         //currentCustomer.MoveAlongWaypoints(exitWays);
+        customerOverviewAnimator.Play("Exit");
         customerManager.RemoveCustomerFromLine(currentCustomer);
         if (customerManager.shootingAreaManager.HasFreeShootingRange())
         {
