@@ -5633,6 +5633,12 @@ MonoBehaviour:
   m_VoxelSize: 0.06666667
   m_BuildHeightMesh: 0
   m_NavMeshData: {fileID: 23800000, guid: d1d74736be4cc9b4ebf2a03fc85a86ae, type: 2}
+--- !u!1 &1669273239 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2355559853572453866, guid: f6dafc603a508d148a3a3ff08c9c1163,
+    type: 3}
+  m_PrefabInstance: {fileID: 7405602881628935558}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1709103966
 GameObject:
   m_ObjectHideFlags: 0
@@ -6731,6 +6737,41 @@ PrefabInstance:
       propertyPath: m_Name
       value: Shooting Range 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2015625560531501872, guid: 20fd365c8970c0442b55bf82f80ad91c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2919336291912704442, guid: 20fd365c8970c0442b55bf82f80ad91c,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.1644167
+      objectReference: {fileID: 0}
+    - target: {fileID: 2919336291912704442, guid: 20fd365c8970c0442b55bf82f80ad91c,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.042937968
+      objectReference: {fileID: 0}
+    - target: {fileID: 2919336291912704442, guid: 20fd365c8970c0442b55bf82f80ad91c,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2.3796856
+      objectReference: {fileID: 0}
+    - target: {fileID: 2919336291912704442, guid: 20fd365c8970c0442b55bf82f80ad91c,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.3371
+      objectReference: {fileID: 0}
+    - target: {fileID: 2919336291912704442, guid: 20fd365c8970c0442b55bf82f80ad91c,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.0186
+      objectReference: {fileID: 0}
+    - target: {fileID: 2933848960124157580, guid: 20fd365c8970c0442b55bf82f80ad91c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4030445105909194298, guid: 20fd365c8970c0442b55bf82f80ad91c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6780,6 +6821,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4438746785795411077, guid: 20fd365c8970c0442b55bf82f80ad91c,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4438746785795411077, guid: 20fd365c8970c0442b55bf82f80ad91c,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4438746785795411077, guid: 20fd365c8970c0442b55bf82f80ad91c,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7902449781303471874, guid: 20fd365c8970c0442b55bf82f80ad91c,
         type: 3}
@@ -6985,6 +7041,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 7405602881628935558}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4966374442698212553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1669273239}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abfd01f3b8f7b814eaf5d5ab92e751d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5577433376234224995
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7226,7 +7294,11 @@ PrefabInstance:
     - {fileID: 574410898562002234, guid: f6dafc603a508d148a3a3ff08c9c1163, type: 3}
     - {fileID: 5735886142485483793, guid: f6dafc603a508d148a3a3ff08c9c1163, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2355559853572453866, guid: f6dafc603a508d148a3a3ff08c9c1163,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4966374442698212553}
   m_SourcePrefab: {fileID: 100100000, guid: f6dafc603a508d148a3a3ff08c9c1163, type: 3}
 --- !u!1 &7405602881628935559 stripped
 GameObject:
