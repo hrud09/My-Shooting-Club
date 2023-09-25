@@ -5,14 +5,23 @@ using DG.Tweening;
 
 public class ShootingRange : MonoBehaviour
 {
-    public bool isUnlocked;
+
+
+    public BuildingType buildingType;
+    public string shootingRangeId;
     public bool isOccupied;
     public bool isOutOfService;
     public Transform shootingSpot;
     public WeaponManager weaponManager;
     public GameObject targetSheet;
     public GameObject outOfAmmoSign;
+    public UnlockManager unlockManager;
 
+    private void Awake()
+    {
+        unlockManager.buildingType = buildingType;
+        unlockManager.unlockID = shootingRangeId;
+    }
 
     private void Update()
     {

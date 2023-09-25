@@ -11,7 +11,7 @@ public class ShootingAreaManager : MonoBehaviour
     {
         for (int i = 0; i < shootingRanges.Length; i++)
         {
-            if (shootingRanges[i].isUnlocked && !shootingRanges[i].isOccupied && !shootingRanges[i].isOutOfService && shootingRanges[i].weaponManager.HasLoadedGun())
+            if (shootingRanges[i].unlockManager.isUnlocked && !shootingRanges[i].isOccupied && !shootingRanges[i].isOutOfService && shootingRanges[i].weaponManager.HasLoadedGun())
             {
                 return true;
             }
@@ -24,7 +24,7 @@ public class ShootingAreaManager : MonoBehaviour
     {
         for (int i = 0; i < shootingRanges.Length; i++)
         {
-            if (shootingRanges[i].isUnlocked && !shootingRanges[i].isOccupied && !shootingRanges[i].isOutOfService && shootingRanges[i].weaponManager.HasLoadedGun())
+            if (shootingRanges[i].unlockManager.isUnlocked && !shootingRanges[i].isOccupied && !shootingRanges[i].isOutOfService && shootingRanges[i].weaponManager.HasLoadedGun())
             {
                 shootingRanges[i].isOccupied = true;
                 return shootingRanges[i].shootingSpot;
