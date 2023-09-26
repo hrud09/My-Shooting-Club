@@ -32,7 +32,7 @@ public class WeaponManager : MonoBehaviour
             }
             weapon.gameObject.transform.DOPunchScale(Vector3.one * 1.02f,0.1f, 5);
             Destroy(bullet);
-           // if (weapon.weaponInfo.currentBulletCount == weapon.weaponInfo.bulletCapacity) customerManager.SendNextCustomerToShoot();
+           
             isReloading = false;
         });
 

@@ -14,10 +14,12 @@ public class ShootingRange : MonoBehaviour
     public WeaponManager weaponManager;
     public GameObject targetSheet;
     public GameObject outOfAmmoSign;
-
+    public ShootingAreaManager shootingAreaManager;
     private void Start()
     {
         isUnlocked = true;
+        shootingAreaManager = GetComponentInParent<ShootingAreaManager>();
+        shootingAreaManager.unlockedShootingRanges.Add(this);
     }
     private void Update()
     {
