@@ -5,13 +5,14 @@ using UnityEngine;
 public class ShootingAreaManager : MonoBehaviour
 {
 
-    public ShootingRange[] shootingRanges;
+    public ShootingRange[] allShootingRanges;
+    public List<ShootingRange> unlockedShootingRanges;
    
     public bool HasFreeShootingRange()
     {
-        for (int i = 0; i < shootingRanges.Length; i++)
+        for (int i = 0; i < unlockedShootingRanges.Count; i++)
         {
-            if (shootingRanges[i].unlockManager.isUnlocked && !shootingRanges[i].isOccupied && !shootingRanges[i].isOutOfService && shootingRanges[i].weaponManager.HasLoadedGun())
+            if (unlockedShootingRanges[i].isUnlocked && !unlockedShootingRanges[i].isOccupied && !unlockedShootingRanges[i].isOutOfService && unlockedShootingRanges[i].weaponManager.HasLoadedGun())
             {
                 return true;
             }
@@ -22,12 +23,12 @@ public class ShootingAreaManager : MonoBehaviour
    
     public Transform GetFreeShootinRange()
     {
-        for (int i = 0; i < shootingRanges.Length; i++)
+        for (int i = 0; i < unlockedShootingRanges.Count; i++)
         {
-            if (shootingRanges[i].unlockManager.isUnlocked && !shootingRanges[i].isOccupied && !shootingRanges[i].isOutOfService && shootingRanges[i].weaponManager.HasLoadedGun())
+            if (unlockedShootingRanges[i].isUnlocked && !unlockedShootingRanges[i].isOccupied && !unlockedShootingRanges[i].isOutOfService && unlockedShootingRanges[i].weaponManager.HasLoadedGun())
             {
-                shootingRanges[i].isOccupied = true;
-                return shootingRanges[i].shootingSpot;
+                unlockedShootingRanges[i].isOccupied = true;
+                return unlockedShootingRanges[i].shootingSpot;
             }
         }
         return null;

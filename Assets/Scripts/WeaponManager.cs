@@ -24,9 +24,15 @@ public class WeaponManager : MonoBehaviour
         bullet.transform.DOJump(currentWeaponTransform.position, 3, 1, 0.1f).OnComplete(() =>
         {
             weapon.weaponInfo.currentBulletCount++;
-            if (!shootingRange.isOccupied && weapon.weaponInfo.currentBulletCount >= weapon.weaponInfo.bulletCapacity) customerManager.SendNextCustomerToShoot();
+            if (!shootingRange.isOccupied && weapon.weaponInfo.currentBulletCount >= weapon.weaponInfo.bulletCapacity)
+
+            {
+                print("Here");
+                customerManager.SendNextCustomerToShoot();
+            }
             weapon.gameObject.transform.DOPunchScale(Vector3.one * 1.02f,0.1f, 5);
             Destroy(bullet);
+           // if (weapon.weaponInfo.currentBulletCount == weapon.weaponInfo.bulletCapacity) customerManager.SendNextCustomerToShoot();
             isReloading = false;
         });
 

@@ -39,7 +39,7 @@ public class WelcomeDeskManager : MonoBehaviour
         customerDesignation.text = customerInfo.designation;
         yield return new WaitUntil(()=> playerOnDesk);
         if(customerManager.HasFreePosition()) customerOverviewAnimator.Play("Entry");
-        else customerOverviewAnimator.Play("Exit");
+       /* else customerOverviewAnimator.Play("Exit");*/
 
     }
 
@@ -59,7 +59,7 @@ public class WelcomeDeskManager : MonoBehaviour
         if (other.tag == "Player")
         {
             playerOnDesk = false;
-            if (currentCustomer) { 
+            if (currentCustomer & customerManager.HasFreePosition()) { 
                 customerOverviewAnimator.Play("Exit");
             }
            

@@ -7,22 +7,18 @@ public class ShootingRange : MonoBehaviour
 {
 
 
-    public BuildingType buildingType;
-    public string shootingRangeId;
+    public bool isUnlocked;
     public bool isOccupied;
     public bool isOutOfService;
     public Transform shootingSpot;
     public WeaponManager weaponManager;
     public GameObject targetSheet;
     public GameObject outOfAmmoSign;
-    public UnlockManager unlockManager;
 
-    private void Awake()
+    private void Start()
     {
-        unlockManager.buildingType = buildingType;
-        unlockManager.unlockID = shootingRangeId;
+        isUnlocked = true;
     }
-
     private void Update()
     {
         if (!weaponManager.HasLoadedGun() && !outOfAmmoSign.activeInHierarchy && !isOccupied )
