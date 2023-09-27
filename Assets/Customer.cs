@@ -15,6 +15,9 @@ public class Customer : MonoBehaviour
     private Tween animationTween;
     public ShootingRange shootingRange;
     public Weapon currentWeapon;
+
+    public int sofaId;
+    public Sofa bookedSofa;
     public void InitializeCustomer(CustomerInfo info)
     {
         for (int i = 0; i < meshParent.childCount; i++)
@@ -26,7 +29,7 @@ public class Customer : MonoBehaviour
         customerInfo.designation = info.designation;
     }
 
-    public void MoveToTargetPosition(Transform destination, MovingTo movingTo)
+    public void MoveToTargetPosition(Transform destination, MovingTo movingTo, Sofa sofa = null, int sofaIndex = 0)
     {
         StopAllCoroutines();
         if (animationTween.IsActive()) animationTween.Kill();
@@ -65,6 +68,7 @@ public class Customer : MonoBehaviour
             StartCoroutine(PostArivalAction(destination.position, () => {
 
                 //Sit
+
                 customerManager.customersInSofa.Add(this);
             }));
         }

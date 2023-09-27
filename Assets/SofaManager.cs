@@ -4,20 +4,22 @@ using UnityEngine;
 
 public class SofaManager : MonoBehaviour
 {
-    public Sofa[] sofas;
+
+    public Sofa[] allSofa;
+    public List<Sofa> unlockedSofas;
 
     public Transform GetFreeSittingPostion() {
 
-        for (int i = 0; i < sofas.Length; i++)
+        for (int i = 0; i < unlockedSofas.Count; i++)
         {
-            if (sofas[i].isUnlocked)
+            if (unlockedSofas[i].unlockManager.isUnlocked)
             {
-                for (int j = 0; j < sofas[i].sittingPositionsInfo.Length; j++)
+                for (int j = 0; j < unlockedSofas[i].sittingPositionsInfo.Length; j++)
                 {
-                    if (sofas[i].sittingPositionsInfo[j].isFree)
+                    if (unlockedSofas[i].sittingPositionsInfo[j].isFree)
                     {
-                        sofas[i].sittingPositionsInfo[j].isFree = false;
-                        return sofas[i].sittingPositionsInfo[j].positionTransform; 
+                        unlockedSofas[i].sittingPositionsInfo[j].isFree = false;
+                        return unlockedSofas[i].sittingPositionsInfo[j].positionTransform; 
                     }
                 }
             }
@@ -28,13 +30,13 @@ public class SofaManager : MonoBehaviour
 
     public bool HasFreeSit()
     {
-        for (int i = 0; i < sofas.Length; i++)
+        for (int i = 0; i < unlockedSofas.Count; i++)
         {
-            if (sofas[i].isUnlocked)
+            if (unlockedSofas[i].unlockManager.isUnlocked)
             {
-                for (int j = 0; j < sofas[i].sittingPositionsInfo.Length; j++)
+                for (int j = 0; j < unlockedSofas[i].sittingPositionsInfo.Length; j++)
                 {
-                    if (sofas[i].sittingPositionsInfo[j].isFree) return true;
+                    if (unlockedSofas[i].sittingPositionsInfo[j].isFree) return true;
                 }
             }
         }
@@ -45,7 +47,7 @@ public class SofaManager : MonoBehaviour
 [System.Serializable]
 public class FreePlaceInfo {
 
-    public string sofaID;
+
     public Transform positionTransform;
     public bool isFree;
 }

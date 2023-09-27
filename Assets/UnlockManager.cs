@@ -30,7 +30,7 @@ public class UnlockManager : MonoBehaviour
     {
         unlockAreaID = buildingType.ToString() + unlockIndex;
         currentValue = PlayerPrefs.GetFloat(unlockAreaID + "CurrentValue", (float)unlockCost);
-        originalTextScale = currentValueText.transform.localScale.x;
+        if (currentValueText != null) originalTextScale = currentValueText.transform.localScale.x;
         // Store the original scale.
         CheckUnlock();
         UpdateCurrentValueText();
