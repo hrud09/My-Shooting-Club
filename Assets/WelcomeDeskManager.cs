@@ -84,10 +84,6 @@ public class WelcomeDeskManager : MonoBehaviour
         {
             currentCustomer.MoveToTargetPosition(customerManager.shootingAreaManager.GetFreeShootinRange(), MovingTo.ShootingRange);
         }
-        else if (customerManager.sofaManager.HasFreeSit())
-        {
-            currentCustomer.MoveToTargetPosition(customerManager.sofaManager.GetFreeSittingPostion(), MovingTo.Sofa);
-        }
         currentCustomer = null;
     }
 }

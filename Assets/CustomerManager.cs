@@ -14,7 +14,6 @@ public class CustomerManager : MonoBehaviour
 
     public WelcomeDeskManager welcomeDeskManager;
     public ShootingAreaManager shootingAreaManager;
-    public SofaManager sofaManager;
 
     public int customersInLineCount;
     public List<Customer> customersInLine = new List<Customer>();
@@ -169,7 +168,8 @@ public class CustomerManager : MonoBehaviour
     public bool HasFreePosition()
     {
         if (shootingAreaManager.HasFreeShootingRange()) return true;
-        return sofaManager.HasFreeSit();
+
+        return false;
     }
 }
 
