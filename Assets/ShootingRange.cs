@@ -17,6 +17,7 @@ public class ShootingRange : MonoBehaviour
     public ShootingAreaManager shootingAreaManager;
 
     public GameObject[] sideWalls;
+
     private void Start()
     {
        

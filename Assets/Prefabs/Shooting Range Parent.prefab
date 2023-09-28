@@ -1046,7 +1046,7 @@ MonoBehaviour:
   isOutOfService: 0
   shootingSpot: {fileID: 2241054571561904477}
   weaponManager: {fileID: 7438539115188500130}
-  targetSheet: {fileID: 0}
+  targetSheet: {fileID: 6839108814728858002}
   outOfAmmoSign: {fileID: 5569361939590135128}
   shootingAreaManager: {fileID: 0}
   sideWalls: []

@@ -58,8 +58,11 @@ public class WeaponManager : MonoBehaviour
                     {
                         if (weaponPunchScaleTween != null) weaponPunchScaleTween.Kill();
                         bullet.SetActive(false);
-                        weapon.gameObject.transform.localScale = Vector3.one;
-                        weaponPunchScaleTween = weapon.gameObject.transform.DOPunchScale(Vector3.one * 1.01f, 0.1f, 1);
+                        
+                        weaponPunchScaleTween = weapon.gameObject.transform.DOScale(Vector3.one * 1.01f, 0.1f).OnComplete(()=> {
+
+                            weapon.gameObject.transform.localScale = Vector3.one;
+                        });
                     });
 
                 delay += 0.1f; // Increase the delay for the next bullet

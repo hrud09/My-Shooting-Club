@@ -76,7 +76,7 @@ public class Customer : MonoBehaviour
         {
             StartCoroutine(PostArivalAction(destination.position, () =>
             {
-                
+               
             }));
         }
    
@@ -103,7 +103,10 @@ public class Customer : MonoBehaviour
         {
             customerInfo.isInsideShootingRange = true;
             shootingRange = other.gameObject.GetComponentInParent<ShootingRange>();
-            transform.DOLocalRotate(Vector3.back * 90, 0.3f);
+            // transform.DOLocalRotate(Vector3.back * 90, 0.3f);
+            Vector3 lookAtPos = shootingRange.targetSheet.transform.position;
+            lookAtPos.y = transform.position.y;
+            transform.LookAt(lookAtPos);
             if (!customerInfo.hasWeapon)
             {
                 if (!shootingRange.weaponManager.HasLoadedGun()) return;
