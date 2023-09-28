@@ -15,6 +15,8 @@ public class ShootingRange : MonoBehaviour
     public GameObject targetSheet;
     public GameObject outOfAmmoSign;
     public ShootingAreaManager shootingAreaManager;
+
+    public GameObject[] sideWalls;
     private void Start()
     {
         isUnlocked = true;
