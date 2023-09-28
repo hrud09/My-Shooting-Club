@@ -7,7 +7,6 @@ using UnityEngine.UI;
 public enum ItemTypes
 {
     None,
-    Bullet,
     Package
 }
 
@@ -48,9 +47,9 @@ public class StackManager : MonoBehaviour
     public Image fillImage;
     public Transform bulletTrayPos;
 
+    public GameObject bulletPrefab;
+
     [SerializeField] DeliveryAreaManager deliveryAreaManager;
-    [SerializeField] UnpackAreaManager unpackAreaManager;
-    [SerializeField] BulletTrayManager trayManager;
     [SerializeField] WeaponManager weaponManager;
     public GameObject bulletTray;
 
@@ -85,20 +84,6 @@ public class StackManager : MonoBehaviour
                 SetMaxItemCount(collectedItemType);
             }
         }
-        else if (other.gameObject.layer == 8)
-        {
-            unpackAreaManager = other.gameObject.GetComponentInParent<UnpackAreaManager>();
-        }
-        else if (other.gameObject.layer == 9)
-        {
-            trayManager = other.GetComponentInParent<BulletTrayManager>();
-            if (IsItemTypeMatch(trayManager.itemType))
-            {
-                SetMaxItemCount(trayManager.itemType);
-                bulletTray.SetActive(true);
-                animator.SetLayerWeight(1, 1);
-            }
-        }
         else if (other.gameObject.layer == 11)
         {
             weaponManager = other.GetComponentInParent<WeaponManager>();
@@ -114,31 +99,10 @@ public class StackManager : MonoBehaviour
                 GetItem(deliveryAreaManager.GetAndRemoveLastItem());
             }
         }
-        else if (other.gameObject.layer == 8 && collectedItemType == ItemTypes.Package)
-        {
-            if (collectedItems.Count > 0 && unpackAreaManager.IsInDisposableCondition())
-            {
-                GameObject g = collectedItems[0];
-                collectedItems.Remove(g);
-                unpackAreaManager.DisposeAPackage(g);
-                if (collectedItems.Count == 0)
-                {
-                    animator.SetLayerWeight(1, 0);
-                    collectedItemType = ItemTypes.None;
-                }
-            }
-        }
-        else if (other.gameObject.layer == 9)
-        {
-            if (collectedItems.Count < maxItemCount && !isStacking)
-            {
-                GetItem(trayManager.GetBullet());
-            }
-        }
-        else if (other.gameObject.layer == 11 && !weaponManager.isReloading && collectedItemType == ItemTypes.Bullet && !weaponManager.HasLoadedGun() && collectedItems.Count > 0)
+        else if (other.gameObject.layer == 11 && !weaponManager.isReloading && collectedItemType == ItemTypes.Package && !weaponManager.HasLoadedGun() && collectedItems.Count > 0)
         {
             weaponManager.isReloading = true;
-            weaponManager.CheckWeaponReload(GetABullet());
+            weaponManager.Reload(GetABulletPackage());
         }
     }
 
@@ -147,19 +111,6 @@ public class StackManager : MonoBehaviour
         if (other.gameObject.layer == 7)
         {
             deliveryAreaManager = null;
-        }
-        else if (other.gameObject.layer == 8)
-        {
-            unpackAreaManager = null;
-        }
-        else if (other.gameObject.layer == 9)
-        {
-            if (collectedItems.Count <= 0)
-            {
-                bulletTray.SetActive(false);
-                animator.SetLayerWeight(1, 0);
-            }
-            trayManager = null;
         }
         else if (other.gameObject.layer == 11)
         {
@@ -191,7 +142,6 @@ public class StackManager : MonoBehaviour
             Debug.LogWarning("Different item type encountered. Ignoring the item.");
         }
     }
-
     private float GetGapForItemType(ItemTypes itemType)
     {
         foreach (var data in itemTypeData)
@@ -203,20 +153,14 @@ public class StackManager : MonoBehaviour
         }
         return 0.0f; // Default gap when item type is None or unrecognized
     }
-
     private ItemTypes GetItemType(GameObject item)
     {
-        if (item.CompareTag("Bullet"))
-        {
-            return ItemTypes.Bullet;
-        }
-        else if (item.CompareTag("Package"))
+        if (item.CompareTag("Package"))
         {
             return ItemTypes.Package;
         }
         return ItemTypes.None;
     }
-
     private void StackItems(GameObject _item)
     {
         int _index = collectedItems.Count;
@@ -228,12 +172,10 @@ public class StackManager : MonoBehaviour
             isStacking = false;
         });
     }
-
     private bool IsItemTypeMatch(ItemTypes requiredType)
     {
         return collectedItemType == ItemTypes.None || collectedItemType == requiredType;
     }
-
     private void SetMaxItemCount(ItemTypes itemType)
     {
         foreach (var capacityData in itemTypeData)
@@ -245,7 +187,8 @@ public class StackManager : MonoBehaviour
             }
         }
     }
-    public GameObject GetABullet()
+
+    public GameObject GetABulletPackage()
     {
         if (collectedItems.Count > 0)
         {

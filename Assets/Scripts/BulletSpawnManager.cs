@@ -5,11 +5,8 @@ using DG.Tweening;
 
 public class BulletSpawnManager : MonoBehaviour
 {
-
-    public UnpackAreaManager unpackAreaManager;
     public CollectionAreaInfo collectionAreaInfo;
     public Transform[] bulletMovementPos;
-    public BulletTrayManager trayManager;
 
     public void GenerateBullet(int bulletCount)
     {
@@ -32,9 +29,6 @@ public class BulletSpawnManager : MonoBehaviour
         bullet.DOMove(bulletMovementPos[1].position, 1f).SetEase(Ease.Linear).OnComplete(() =>
         {
             bullet.GetComponent<Rigidbody>().isKinematic = false;
-            bullet.transform.parent = trayManager.bulletParent;
-            trayManager.StoreBullet(bullet.gameObject);
-            unpackAreaManager.CheckForUnpacking();
         });
     }
 }

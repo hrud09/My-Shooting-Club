@@ -19,6 +19,7 @@ public class ShootingRange : MonoBehaviour
     public GameObject[] sideWalls;
     private void Start()
     {
+       
         isUnlocked = true;
         shootingAreaManager = GetComponentInParent<ShootingAreaManager>();
         shootingAreaManager.unlockedShootingRanges.Add(this);
