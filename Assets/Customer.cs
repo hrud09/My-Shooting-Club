@@ -104,9 +104,7 @@ public class Customer : MonoBehaviour
             customerInfo.isInsideShootingRange = true;
             shootingRange = other.gameObject.GetComponentInParent<ShootingRange>();
             // transform.DOLocalRotate(Vector3.back * 90, 0.3f);
-            Vector3 lookAtPos = shootingRange.targetSheet.transform.position;
-            lookAtPos.y = transform.position.y;
-            transform.LookAt(lookAtPos);
+            customerInfo.agent.enabled = false;
             if (!customerInfo.hasWeapon)
             {
                 if (!shootingRange.weaponManager.HasLoadedGun()) return;
@@ -115,9 +113,11 @@ public class Customer : MonoBehaviour
                 customerInfo.hasWeapon = true;
                 currentWeapon = weapon;
                 weapon.isInUse = true;
-                Vector3 targetLookAt = weapon.gameObject.transform.position;
-                targetLookAt.y = transform.position.y;
-                transform.DOLookAt(targetLookAt, 0.4f).OnComplete(() => {
+
+                Vector3 lookAtPos = Vector3.zero;
+                lookAtPos.y = shootingRange.yRotationWhileShooting;
+                //lookAtPos.y = transform.position.y;
+                transform.DORotate(lookAtPos, 0.2f).OnComplete(() => {
 
                     weapon.gameObject.transform.DOJump(customerInfo.weaponPos.position, 2, 1, 0.2f).OnComplete(() => {
 
@@ -125,12 +125,7 @@ public class Customer : MonoBehaviour
                         weapon.gameObject.transform.localRotation = Quaternion.identity;
                         weapon.gameObject.transform.localPosition = Vector3.zero;
                         weapon.gameObject.transform.localScale = Vector3.one;
-                        transform.DOLocalRotate(Vector3.zero, 0.3f).OnComplete(() => {
-
-                            if (!customerInfo.isShooting && !customerInfo.shootingIsOver) StartShooting();
-
-                        });
-
+                        if (!customerInfo.isShooting && !customerInfo.shootingIsOver) StartShooting();
                     });
 
                 });
@@ -151,6 +146,7 @@ public class Customer : MonoBehaviour
         currentWeapon.weaponInfo.currentBulletCount --;
         if (currentWeapon.weaponInfo.currentBulletCount == 0)
         {
+            customerInfo.agent.enabled = true;
             customerInfo.shootingIsOver = true;
             customerInfo.isShooting = false;
             currentWeapon.WeaponEmptyAction();

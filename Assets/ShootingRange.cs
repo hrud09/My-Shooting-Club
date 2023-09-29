@@ -12,7 +12,7 @@ public class ShootingRange : MonoBehaviour
     public bool isOutOfService;
     public Transform shootingSpot;
     public WeaponManager weaponManager;
-    public GameObject targetSheet;
+    public float yRotationWhileShooting;
     public GameObject outOfAmmoSign;
     public ShootingAreaManager shootingAreaManager;
 
@@ -20,7 +20,8 @@ public class ShootingRange : MonoBehaviour
 
     private void Start()
     {
-       
+        if (transform.position.x > 0) yRotationWhileShooting = 90;
+        else yRotationWhileShooting = -90;
         isUnlocked = true;
         shootingAreaManager = GetComponentInParent<ShootingAreaManager>();
         shootingAreaManager.unlockedShootingRanges.Add(this);
