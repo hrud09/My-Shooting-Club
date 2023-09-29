@@ -143,6 +143,7 @@ public class Customer : MonoBehaviour
     public void CheckWeaponAndShootingRound()
     {
         if (customerInfo.shootingIsOver) return;
+        EconomyManager.UpdateEconomy(1);
         currentWeapon.weaponInfo.currentBulletCount --;
         if (currentWeapon.weaponInfo.currentBulletCount == 0)
         {

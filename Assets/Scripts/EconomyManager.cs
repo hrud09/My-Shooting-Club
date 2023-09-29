@@ -11,7 +11,7 @@ public static class EconomyManager
 
     public static int MoneyCount
     {
-        get { return PlayerPrefs.GetInt("MoneyCount", 0); }
+        get { return PlayerPrefs.GetInt("MoneyCount", 400); }
         private set { PlayerPrefs.SetInt("MoneyCount", value); }
     }
 

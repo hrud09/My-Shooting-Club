@@ -13,7 +13,7 @@ public class UnlockManager : MonoBehaviour
 
     public bool isUnlocked;
     public int unlockCost;
-    public float currentValue;
+    public int currentValue;
     public TMP_Text currentValueText; // Reference to the TMP_Text component for displaying currentValue.
     public GameObject objectToUnlock;
     public GameObject player;
@@ -24,12 +24,12 @@ public class UnlockManager : MonoBehaviour
     private float originalTextScale;
 
 
-
+    [SerializeField] float timePerDollar = 0.01f;
     // Start is called before the first frame update
     void Start()
     {
         unlockAreaID = buildingType.ToString() + unlockIndex;
-        currentValue = PlayerPrefs.GetFloat(unlockAreaID + "CurrentValue", (float)unlockCost);
+        currentValue = PlayerPrefs.GetInt(unlockAreaID + "CurrentValue", unlockCost);
         if (currentValueText != null) originalTextScale = currentValueText.transform.localScale.x;
         // Store the original scale.
         CheckUnlock();
@@ -50,9 +50,11 @@ public class UnlockManager : MonoBehaviour
 
     private void Update()
     {
-        if (player && !isUnlocked && currentValue > 0)
+        if (player && !isUnlocked && currentValue > 0 && EconomyManager.MoneyCount > 0 && timePerDollar<=0)
         {
-            currentValue -= Time.deltaTime * 100;
+            timePerDollar = 0.01f;
+            currentValue -= 1;
+            EconomyManager.UpdateEconomy(-1);
             if (currentValue <= 0)
             {
                 Unlock();
@@ -60,6 +62,10 @@ public class UnlockManager : MonoBehaviour
 
             // Update the text and apply a pop effect.
             UpdateCurrentValueText();
+        }
+        else
+        {
+            timePerDollar -= Time.deltaTime;
         }
     }
 
@@ -85,13 +91,13 @@ public class UnlockManager : MonoBehaviour
     {
         if (other.gameObject.layer == 6)
         {
-            PlayerPrefs.SetFloat(unlockAreaID + "CurrentValue", currentValue);
+            PlayerPrefs.SetInt(unlockAreaID + "CurrentValue", currentValue);
             player = null;
         }
     }
     private void OnApplicationQuit()
     {
-        PlayerPrefs.SetFloat(unlockAreaID + "CurrentValue", currentValue);
+        PlayerPrefs.SetInt(unlockAreaID + "CurrentValue", currentValue);
     }
     // Function to update the current value text and apply a pop effect.
     private void UpdateCurrentValueText()
