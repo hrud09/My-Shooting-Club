@@ -14,7 +14,7 @@ public class WeaponManager : MonoBehaviour
 
     public GameObject bulletPrefab;
     public List<GameObject> spawnedBullet;
-
+    public Transform reloadArea;
 
     private Tween weaponPunchScaleTween;
     private void Start()
@@ -32,17 +32,14 @@ public class WeaponManager : MonoBehaviour
     {
         if (!package) return;
         if (HasLoadedGun()) return;
-
-
-
         currentWeaponTransform = weapon.gameObject.transform;
         //package.transform.localScale = Vector3.one * 0.7f;
 
         package.transform.parent = null;
 
-        package.transform.DOMoveY(3, 0.5f).OnComplete(()=> {
+        package.transform.DOJump(reloadArea.position, 2, 1, 0.5f).OnComplete(()=> {
 
-            package.GetComponent<Crate>().Break();
+          
             float delay = 0.1f; // Initial delay for the first bullet
             weapon.weaponInfo.currentBulletCount+= 10;
             foreach (var bullet in spawnedBullet)
@@ -58,7 +55,10 @@ public class WeaponManager : MonoBehaviour
                     {
                         if (weaponPunchScaleTween != null) weaponPunchScaleTween.Kill();
                         bullet.SetActive(false);
-                        
+                        if (spawnedBullet.IndexOf(bullet) == spawnedBullet.Count - 1)
+                        {
+                            package.GetComponent<Crate>().Break();
+                        }                        
                         weaponPunchScaleTween = weapon.gameObject.transform.DOScale(Vector3.one * 1.01f, 0.1f).OnComplete(()=> {
 
                             weapon.gameObject.transform.localScale = Vector3.one;
@@ -81,6 +81,13 @@ public class WeaponManager : MonoBehaviour
         bool _hasLoadedGun = (weapon.weaponInfo.currentBulletCount == weapon.weaponInfo.bulletCapacity);
         hasLoadedGun = _hasLoadedGun;
         return _hasLoadedGun;
+    }
+
+    public void EmptyWeaponAction()
+    {
+        shootingRange.outOfAmmoSign.transform.localScale = Vector3.zero;
+        shootingRange.outOfAmmoSign.SetActive(true);
+        shootingRange.outOfAmmoSign.transform.DOScale(Vector3.one, 0.4f);
     }
 }
 

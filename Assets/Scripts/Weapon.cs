@@ -10,6 +10,7 @@ public class Weapon : MonoBehaviour
     public WeaponInfo weaponInfo;
     public bool isInUse;
     public TMP_Text bulletCount;
+    public WeaponManager weaponManager;
     public void WeaponEmptyAction()
     {
         transform.DOJump(weaponInfo.weaponPositionTransform.position, 2, 1, 0.5f).OnComplete(()=> {
@@ -19,6 +20,7 @@ public class Weapon : MonoBehaviour
             transform.parent = weaponInfo.weaponPositionTransform;
             transform.localScale = Vector3.one;
             transform.DOLocalRotate(Vector3.zero, 0.2f);
+            weaponManager.EmptyWeaponAction();
         });
     }
 

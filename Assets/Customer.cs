@@ -41,8 +41,9 @@ public class Customer : MonoBehaviour
         {
             StartCoroutine(PostArivalAction(destination.position, () => {
 
-
-
+                Vector3 lookAtPos = customerManager.welcomeDeskManager.transform.position;
+                lookAtPos.y = transform.position.y;
+                transform.DOLookAt(lookAtPos, 0.1f);
             }));
         }
         else if (movingTo == MovingTo.WelcomeDesk)

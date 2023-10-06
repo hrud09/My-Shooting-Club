@@ -22,9 +22,28 @@ public class ShootingRange : MonoBehaviour
     {
         if (transform.position.x > 0) yRotationWhileShooting = 90;
         else yRotationWhileShooting = -90;
-        isUnlocked = true;
+
+        outOfAmmoSign.transform.localScale = Vector3.zero;
+        outOfAmmoSign.SetActive(true);
+        outOfAmmoSign.transform.DOScale(Vector3.one, 0.4f);
+    }
+
+
+    public void OnNewUnlock()
+    {
         shootingAreaManager = GetComponentInParent<ShootingAreaManager>();
+        isUnlocked = true;
         shootingAreaManager.unlockedShootingRanges.Add(this);
+        shootingAreaManager.lockedShootingRanges.Remove(this);
+        shootingAreaManager.CheckForUnlock();
+    }
+
+    public void OnStartUnlock()
+    {
+        shootingAreaManager = GetComponentInParent<ShootingAreaManager>();
+        isUnlocked = true;
+        shootingAreaManager.unlockedShootingRanges.Add(this);
+        shootingAreaManager.lockedShootingRanges.Remove(this);
     }
     private void Update()
     {
@@ -44,5 +63,10 @@ public class ShootingRange : MonoBehaviour
 
 
         }
+    }
+
+    public bool IsFreeAndUsable()
+    {
+        return isUnlocked && !isOccupied && !isOutOfService && weaponManager.HasLoadedGun();
     }
 }

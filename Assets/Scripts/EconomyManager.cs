@@ -74,11 +74,6 @@ public static class EconomyManager
             float progress = (Time.time - startTime) / duration;
             int currentValue = Mathf.RoundToInt(Mathf.Lerp(startValue, endValue, progress));
             moneyText.text = FormatMoneyCount(currentValue);
-
-            // Add a pop effect by scaling the text slightly
-            float scale = Mathf.PingPong(progress * 3f, 0.1f) + 1f; // Adjust the values for the desired pop effect
-            moneyText.transform.localScale = originalScale * scale;
-
             yield return null;
         }
 

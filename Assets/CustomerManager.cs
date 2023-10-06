@@ -18,9 +18,10 @@ public class CustomerManager : MonoBehaviour
     public int customersInLineCount;
     public List<Customer> customersInLine = new List<Customer>();
     public List<Customer> customersInSofa = new List<Customer>();
+    public List<Customer> spawnedCustomer = new List<Customer>();
+
 
     public int pooledCustomerCount;
-    public List<Customer> spawnedCustomer = new List<Customer>();
     public AnimationCurve customerSpawnTimeCurve;
     private float timeUntilNextSpawn;
 
@@ -85,10 +86,9 @@ public class CustomerManager : MonoBehaviour
 
     }
     private Customer GetACustomer() {
-
-        Customer electedCustomer;
+       
         if (spawnedCustomer.Count <= 0) Spawn();
-
+        Customer electedCustomer;
         electedCustomer = spawnedCustomer[0];
         electedCustomer.gameObject.SetActive(true);
         spawnedCustomer.Remove(electedCustomer);

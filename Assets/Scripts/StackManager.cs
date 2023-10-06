@@ -35,6 +35,7 @@ public class CollectionAreaInfo
 public class StackManager : MonoBehaviour
 {
     public bool isStacking;
+    public bool isDumping;
     public Transform stackPos;
     public int maxItemCount;
     public float collectionSpeed;
@@ -103,6 +104,17 @@ public class StackManager : MonoBehaviour
         {
             weaponManager.isReloading = true;
             weaponManager.Reload(GetABulletPackage());
+        }
+        else if (other.gameObject.layer == 14 && collectedItems.Count > 0 && !isDumping)
+        {
+            isDumping = true;
+            int lastIndex = collectedItems.Count - 1;
+            GameObject lastItem = collectedItems[lastIndex];
+            collectedItems.Remove(lastItem);
+            lastItem.transform.DOJump(other.gameObject.transform.position, 3, 1, 0.1f).OnComplete(()=> {
+                isDumping = false;
+                if(collectedItems.Count == 0) animator.SetLayerWeight(1, 0);
+            });
         }
     }
 
@@ -187,7 +199,6 @@ public class StackManager : MonoBehaviour
             }
         }
     }
-
     public GameObject GetABulletPackage()
     {
         if (collectedItems.Count > 0)

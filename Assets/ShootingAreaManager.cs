@@ -6,18 +6,25 @@ public class ShootingAreaManager : MonoBehaviour
 {
 
     public ShootingRange[] allShootingRanges;
+    [SerializeField]
     public List<ShootingRange> unlockedShootingRanges;
-   
+    [SerializeField]
+    public List<ShootingRange> lockedShootingRanges;
+
+
+    private void Start()
+    {
+        CheckForUnlock();
+    }
     public bool HasFreeShootingRange()
     {
         for (int i = 0; i < unlockedShootingRanges.Count; i++)
         {
-            if (unlockedShootingRanges[i].isUnlocked && !unlockedShootingRanges[i].isOccupied && !unlockedShootingRanges[i].isOutOfService && unlockedShootingRanges[i].weaponManager.HasLoadedGun())
+            if (unlockedShootingRanges[i].IsFreeAndUsable())
             {
                 return true;
             }
         }
-
         return false;
     }
    
@@ -25,12 +32,24 @@ public class ShootingAreaManager : MonoBehaviour
     {
         for (int i = 0; i < unlockedShootingRanges.Count; i++)
         {
-            if (unlockedShootingRanges[i].isUnlocked && !unlockedShootingRanges[i].isOccupied && !unlockedShootingRanges[i].isOutOfService && unlockedShootingRanges[i].weaponManager.HasLoadedGun())
+            if (unlockedShootingRanges[i].IsFreeAndUsable())
             {
                 unlockedShootingRanges[i].isOccupied = true;
                 return unlockedShootingRanges[i].shootingSpot;
             }
         }
         return null;
+    }
+
+    public void CheckForUnlock()
+    {
+        if (lockedShootingRanges.Count > 0)
+        {
+            lockedShootingRanges[0].gameObject.transform.parent.gameObject.SetActive(true);
+        }
+        for (int i = 1; i < lockedShootingRanges.Count; i++)
+        {
+            lockedShootingRanges[i].gameObject.transform.parent.gameObject.SetActive(false);
+        }
     }
 }

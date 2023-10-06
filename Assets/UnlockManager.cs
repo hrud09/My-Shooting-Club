@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System;
+using UnityEngine.Events;
 
 public class UnlockManager : MonoBehaviour
 {
     public BuildingType buildingType;
     public string unlockIndex;
     private string unlockAreaID;
-
+    [SerializeField]
+    public UnityEvent onStartingUnlock, onNewUnlock;
 
     public bool isUnlocked;
     public int unlockCost;
@@ -26,41 +29,23 @@ public class UnlockManager : MonoBehaviour
 
     [SerializeField] float timePerDollar = 0.01f;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         unlockAreaID = buildingType.ToString() + unlockIndex;
         currentValue = PlayerPrefs.GetInt(unlockAreaID + "CurrentValue", unlockCost);
         if (currentValueText != null) originalTextScale = currentValueText.transform.localScale.x;
-        // Store the original scale.
-        CheckUnlock();
+        if (PlayerPrefs.GetInt(unlockAreaID, 0) == 1) Unlock(true);
         UpdateCurrentValueText();
-    }
-
-    public void CheckUnlock()
-    {
-        if (PlayerPrefs.GetInt(unlockAreaID, 0) == 1)
-        {
-            Unlock();
-        }
-        else
-        {
-            objectToUnlock.SetActive(false);
-        }
     }
 
     private void Update()
     {
-        if (player && !isUnlocked && currentValue > 0 && EconomyManager.MoneyCount > 0 && timePerDollar<=0)
+        if (IsUnlockable())
         {
             timePerDollar = 0.01f;
             currentValue -= 1;
             EconomyManager.UpdateEconomy(-1);
-            if (currentValue <= 0)
-            {
-                Unlock();
-            }
-
-            // Update the text and apply a pop effect.
+            if (currentValue <= 0) Unlock();
             UpdateCurrentValueText();
         }
         else
@@ -68,14 +53,19 @@ public class UnlockManager : MonoBehaviour
             timePerDollar -= Time.deltaTime;
         }
     }
-
-    private void Unlock()
+    private bool IsUnlockable()
+    {
+        return player && !isUnlocked && currentValue > 0 && EconomyManager.MoneyCount > 0 && timePerDollar <= 0;
+    }
+    private void Unlock(bool isStartingUnlockCall = false)
     {
         isUnlocked = true;
-        currentValue = 0; // Ensure it doesn't go negative
-        objectToUnlock.SetActive(true);
+        currentValue = 0;
         transform.parent.gameObject.SetActive(false);
         PlayerPrefs.SetInt(unlockAreaID, 1);
+        objectToUnlock.SetActive(true);
+        if (isStartingUnlockCall) onStartingUnlock.Invoke();
+        else onNewUnlock.Invoke();
     }
     private void OnTriggerEnter(Collider other)
     {
