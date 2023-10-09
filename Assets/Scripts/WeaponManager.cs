@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class WeaponManager : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class WeaponManager : MonoBehaviour
     public Transform reloadArea;
 
     private Tween weaponPunchScaleTween;
+
+    public Image reloadFill;
     private void Start()
     {
         customerManager = FindObjectOfType<CustomerManager>();
@@ -39,40 +42,56 @@ public class WeaponManager : MonoBehaviour
 
         package.transform.DOJump(reloadArea.position, 2, 1, 0.5f).OnComplete(()=> {
 
-          
-            float delay = 0.1f; // Initial delay for the first bullet
-            weapon.weaponInfo.currentBulletCount+= 10;
-            foreach (var bullet in spawnedBullet)
-            {
-                
-                bullet.transform.position = package.transform.position;
-                bullet.SetActive(true);
-                bullet.transform.localScale = Vector3.one * 0.7f;
 
-                bullet.transform.DOJump(weapon.weaponInfo.weaponPositionTransform.position, 3, 1, 0.1f)
-                    .SetDelay(delay)
-                    .OnComplete(() =>
+            reloadFill.gameObject.SetActive(true);
+            reloadFill.fillAmount = 0;
+            float fill = 0;
+            DOTween.To(() => fill, x => fill = x, 1, 0.5f)
+                .OnUpdate(() => {
+                    reloadFill.fillAmount = fill;
+                }).OnComplete(()=> {
+
+
+                    reloadFill.gameObject.SetActive(false);
+                    reloadFill.fillAmount = 0;
+                    float delay = 0.1f; // Initial delay for the first bullet
+                    weapon.weaponInfo.currentBulletCount += 10;
+                    foreach (var bullet in spawnedBullet)
                     {
-                        if (weaponPunchScaleTween != null) weaponPunchScaleTween.Kill();
-                        bullet.SetActive(false);
-                        if (spawnedBullet.IndexOf(bullet) == spawnedBullet.Count - 1)
-                        {
-                            package.GetComponent<Crate>().Break();
-                        }                        
-                        weaponPunchScaleTween = weapon.gameObject.transform.DOScale(Vector3.one * 1.01f, 0.1f).OnComplete(()=> {
 
-                            weapon.gameObject.transform.localScale = Vector3.one;
-                        });
-                    });
+                        bullet.transform.position = package.transform.position;
+                        bullet.SetActive(true);
+                        bullet.transform.localScale = Vector3.one * 0.7f;
 
-                delay += 0.1f; // Increase the delay for the next bullet
-            }
-            // Destroy(package);
-            if (!shootingRange.isOccupied && weapon.weaponInfo.currentBulletCount >= weapon.weaponInfo.bulletCapacity)
-            {
-                customerManager.SendNextCustomerToShoot();
-            }
-            isReloading = false;
+                        bullet.transform.DOJump(weapon.weaponInfo.weaponPositionTransform.position, 3, 1, 0.1f)
+                            .SetDelay(delay)
+                            .OnComplete(() =>
+                            {
+                                if (weaponPunchScaleTween != null) weaponPunchScaleTween.Kill();
+                                bullet.SetActive(false);
+                                if (spawnedBullet.IndexOf(bullet) == spawnedBullet.Count - 1)
+                                {
+                                    package.GetComponent<Crate>().Break();
+                                }
+                                weaponPunchScaleTween = weapon.gameObject.transform.DOScale(Vector3.one * 1.01f, 0.1f).OnComplete(() => {
+
+                                    weapon.gameObject.transform.localScale = Vector3.one;
+                                });
+                            });
+
+                        delay += 0.1f; // Increase the delay for the next bullet
+                    }
+                    // Destroy(package);
+                    if (!shootingRange.isOccupied && weapon.weaponInfo.currentBulletCount >= weapon.weaponInfo.bulletCapacity)
+                    {
+                        customerManager.SendNextCustomerToShoot();
+                    }
+                    isReloading = false;
+
+
+                });
+
+        
         });
     }
 

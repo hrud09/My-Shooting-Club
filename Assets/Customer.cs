@@ -16,7 +16,8 @@ public class Customer : MonoBehaviour
     public ShootingRange shootingRange;
     public Weapon currentWeapon;
 
-    public int sofaId;
+    public GameObject headphones;
+    //public int sofaId;
 
     public void InitializeCustomer(CustomerInfo info)
     {
@@ -77,7 +78,7 @@ public class Customer : MonoBehaviour
         {
             StartCoroutine(PostArivalAction(destination.position, () =>
             {
-               
+              
             }));
         }
    
@@ -110,7 +111,8 @@ public class Customer : MonoBehaviour
             {
                 if (!shootingRange.weaponManager.HasLoadedGun()) return;
                 Weapon weapon = shootingRange.weaponManager.weapon;
-               
+
+                headphones.SetActive(true);
                 customerInfo.hasWeapon = true;
                 currentWeapon = weapon;
                 weapon.isInUse = true;
@@ -148,6 +150,7 @@ public class Customer : MonoBehaviour
         currentWeapon.weaponInfo.currentBulletCount --;
         if (currentWeapon.weaponInfo.currentBulletCount == 0)
         {
+            headphones.SetActive(false);
             customerInfo.agent.enabled = true;
             customerInfo.shootingIsOver = true;
             customerInfo.isShooting = false;

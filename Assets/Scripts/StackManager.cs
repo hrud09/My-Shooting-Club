@@ -71,7 +71,7 @@ public class StackManager : MonoBehaviour
         {
             Vector3 initPos = stackPos.position + Vector3.up * i * GetGapForItemType(collectedItemType);
             collectedItems[i].transform.position = initPos;
-            collectedItems[i].transform.rotation = Quaternion.Slerp(collectedItems[i].transform.rotation, stackPos.rotation, Time.deltaTime * 1 / (i + 1) * collectionSpeed);
+            collectedItems[i].transform.rotation = Quaternion.Slerp(collectedItems[i].transform.rotation, stackPos.rotation, (collectedItems.Count - i) * collectionSpeed);
         }
     }
 
@@ -82,6 +82,7 @@ public class StackManager : MonoBehaviour
             deliveryAreaManager = other.gameObject.GetComponentInParent<DeliveryAreaManager>();
             if (IsItemTypeMatch(deliveryAreaManager.collectionAreaInfo.itemType))
             {
+                collectedItemType = deliveryAreaManager.collectionAreaInfo.itemType;
                 SetMaxItemCount(collectedItemType);
             }
         }
@@ -111,8 +112,9 @@ public class StackManager : MonoBehaviour
             int lastIndex = collectedItems.Count - 1;
             GameObject lastItem = collectedItems[lastIndex];
             collectedItems.Remove(lastItem);
-            lastItem.transform.DOJump(other.gameObject.transform.position, 3, 1, 0.1f).OnComplete(()=> {
+            lastItem.transform.DOJump(other.gameObject.transform.GetChild(2).position, 4, 1, 0.1f).OnComplete(()=> {
                 isDumping = false;
+                Destroy(lastItem);
                 if(collectedItems.Count == 0) animator.SetLayerWeight(1, 0);
             });
         }
@@ -195,6 +197,7 @@ public class StackManager : MonoBehaviour
             if (capacityData.itemType == itemType)
             {
                 maxItemCount = capacityData.maxCapacity;
+                print(maxItemCount);
                 break;
             }
         }

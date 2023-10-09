@@ -5,6 +5,11 @@ public class EconomyManagerScript : MonoBehaviour
 {
     public TMP_Text moneyText;
 
+
+    private void Awake()
+    {
+        Application.targetFrameRate = 60;
+    }
     private void Start()
     {
         EconomyManager.Initialize(moneyText);
