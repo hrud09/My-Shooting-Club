@@ -9,14 +9,14 @@ public class Crate : MonoBehaviour
     public int bulletCount;
     public void Break() {
 
-        for (int i = 0; i < transform.childCount; i++)
+     /*   for (int i = 0; i < transform.childCount; i++)
         {
             GameObject g =  transform.GetChild(i).gameObject;
             g.AddComponent<Rigidbody>();
             MeshCollider m =  g.AddComponent<MeshCollider>();
             m.convex = true;
         }
-        rigidbodies = GetComponentsInChildren<Rigidbody>();
+        rigidbodies = GetComponentsInChildren<Rigidbody>();*/
         for (int i = 0; i < transform.childCount; i++)
         {
             transform.GetChild(i).DOScale(Vector3.zero, 0.3f).OnComplete(()=> {

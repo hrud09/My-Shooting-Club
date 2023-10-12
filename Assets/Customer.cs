@@ -78,7 +78,7 @@ public class Customer : MonoBehaviour
         {
             StartCoroutine(PostArivalAction(destination.position, () =>
             {
-              
+                Shoot();
             }));
         }
    
@@ -91,51 +91,44 @@ public class Customer : MonoBehaviour
 
                 customerInfo.shootingIsOver = false;
                 customerManager.ReturnCustomerPooledObject(this);
-               
-
+              
             }));
         }
  
     }
 
-  
-    private void OnTriggerEnter(Collider other)
+    public void Shoot()
     {
-        if (other.gameObject.layer == 12 && !customerInfo.shootingIsOver)
+        customerInfo.isInsideShootingRange = true;
+        // transform.DOLocalRotate(Vector3.back * 90, 0.3f);
+        customerInfo.agent.enabled = false;
+        if (!customerInfo.hasWeapon)
         {
-            customerInfo.isInsideShootingRange = true;
-            shootingRange = other.gameObject.GetComponentInParent<ShootingRange>();
-            // transform.DOLocalRotate(Vector3.back * 90, 0.3f);
-            customerInfo.agent.enabled = false;
-            if (!customerInfo.hasWeapon)
-            {
-                if (!shootingRange.weaponManager.HasLoadedGun()) return;
-                Weapon weapon = shootingRange.weaponManager.weapon;
+            if (!shootingRange.weaponManager.HasLoadedGun()) return;
+            Weapon weapon = shootingRange.weaponManager.weapon;
 
-                headphones.SetActive(true);
-                customerInfo.hasWeapon = true;
-                currentWeapon = weapon;
-                weapon.isInUse = true;
+            headphones.SetActive(true);
+            customerInfo.hasWeapon = true;
+            currentWeapon = weapon;
+            weapon.isInUse = true;
 
-                Vector3 lookAtPos = Vector3.zero;
-                lookAtPos.y = shootingRange.yRotationWhileShooting;
-                //lookAtPos.y = transform.position.y;
-                transform.DORotate(lookAtPos, 0.2f).OnComplete(() => {
+            Vector3 lookAtPos = Vector3.zero;
+            lookAtPos.y = shootingRange.yRotationWhileShooting;
+            //lookAtPos.y = transform.position.y;
+            transform.DORotate(lookAtPos, 0.2f).OnComplete(() => {
 
-                    weapon.gameObject.transform.DOJump(customerInfo.weaponPos.position, 2, 1, 0.2f).OnComplete(() => {
+                weapon.gameObject.transform.DOJump(customerInfo.weaponPos.position, 2, 1, 0.2f).OnComplete(() => {
 
-                        weapon.gameObject.transform.parent = customerInfo.weaponPos;
-                        weapon.gameObject.transform.localRotation = Quaternion.identity;
-                        weapon.gameObject.transform.localPosition = Vector3.zero;
-                        weapon.gameObject.transform.localScale = Vector3.one;
-                        if (!customerInfo.isShooting && !customerInfo.shootingIsOver) StartShooting();
-                    });
-
+                    weapon.gameObject.transform.parent = customerInfo.weaponPos;
+                    weapon.gameObject.transform.localRotation = Quaternion.identity;
+                    weapon.gameObject.transform.localPosition = Vector3.zero;
+                    weapon.gameObject.transform.localScale = Vector3.one;
+                    if (!customerInfo.isShooting && !customerInfo.shootingIsOver) StartShooting();
                 });
-            }
+
+            });
         }
     }
-
 
     private void StartShooting()
     {
@@ -150,6 +143,8 @@ public class Customer : MonoBehaviour
         currentWeapon.weaponInfo.currentBulletCount --;
         if (currentWeapon.weaponInfo.currentBulletCount == 0)
         {
+
+            shootingRange.isOccupied = false;
             headphones.SetActive(false);
             customerInfo.agent.enabled = true;
             customerInfo.shootingIsOver = true;
@@ -158,6 +153,7 @@ public class Customer : MonoBehaviour
             customerInfo.customerAnimator.SetBool("IsShooting", false);
             MoveToTargetPosition(customerManager.firstWaypoint, MovingTo.ExitFromShootingRange);
             customerManager.SendNextCustomerToShoot();
+            shootingRange = null;
         }
     }
     private void OnTriggerExit(Collider other)

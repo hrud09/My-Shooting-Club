@@ -28,14 +28,14 @@ public class ShootingAreaManager : MonoBehaviour
         return false;
     }
    
-    public Transform GetFreeShootinRange()
+    public ShootingRange GetFreeShootinRange()
     {
         for (int i = 0; i < unlockedShootingRanges.Count; i++)
         {
             if (unlockedShootingRanges[i].IsFreeAndUsable())
             {
                 unlockedShootingRanges[i].isOccupied = true;
-                return unlockedShootingRanges[i].shootingSpot;
+                return unlockedShootingRanges[i];
             }
         }
         return null;

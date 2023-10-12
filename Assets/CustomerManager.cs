@@ -81,7 +81,8 @@ public class CustomerManager : MonoBehaviour
         if (shootingAreaManager.HasFreeShootingRange()) {
 
             customersInSofa.Remove(c);
-            c.MoveToTargetPosition(shootingAreaManager.GetFreeShootinRange(), MovingTo.ShootingRange);
+            c.shootingRange = shootingAreaManager.GetFreeShootinRange();
+            c.MoveToTargetPosition(shootingAreaManager.GetFreeShootinRange().shootingSpot, MovingTo.ShootingRange);
         }
 
     }
@@ -138,32 +139,34 @@ public class CustomerManager : MonoBehaviour
     }
     private string RandomDesignation()
     {
-        string filePath = "Assets/Resources/Designations.txt"; // Replace with the correct path to your text file
-
-        string[] designationArray = System.IO.File.ReadAllText(filePath).Split(',');
+        TextAsset textAsset = Resources.Load<TextAsset>("Designations");
+        string[] designationArray = textAsset.text.Split(',');
         string randomDesignation = "";
+
         if (designationArray.Length > 0)
         {
             int randomIndex = Random.Range(0, designationArray.Length);
-            randomDesignation = designationArray[randomIndex].Trim(); // Trim to remove leading/trailing spaces
+            randomDesignation = designationArray[randomIndex].Trim();
         }
 
         return randomDesignation;
     }
+
     private string RandomName()
     {
-        string filePath = "Assets/Resources/Name.txt"; // Replace with the correct path to your text file
-
-        string[] nameArray = System.IO.File.ReadAllText(filePath).Split(',');
+        TextAsset textAsset = Resources.Load<TextAsset>("Name");
+        string[] nameArray = textAsset.text.Split(',');
         string randomName = "";
+
         if (nameArray.Length > 0)
         {
             int randomIndex = Random.Range(0, nameArray.Length);
-            randomName = nameArray[randomIndex].Trim(); // Trim to remove leading/trailing spaces
+            randomName = nameArray[randomIndex].Trim();
         }
 
         return randomName;
     }
+
 
     public bool HasFreePosition()
     {
