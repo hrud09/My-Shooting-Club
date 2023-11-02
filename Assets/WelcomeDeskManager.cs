@@ -82,7 +82,8 @@ public class WelcomeDeskManager : MonoBehaviour
         customerManager.RemoveCustomerFromLine(currentCustomer);
         if (customerManager.shootingAreaManager.HasFreeShootingRange())
         {
-            currentCustomer.MoveToTargetPosition(customerManager.shootingAreaManager.GetFreeShootinRange().shootingSpot, MovingTo.ShootingRange);
+            currentCustomer.shootingRange = customerManager.shootingAreaManager.GetFreeShootinRange();
+            currentCustomer.MoveToTargetPosition(currentCustomer.shootingRange.shootingSpot, MovingTo.ShootingRange);
         }
         currentCustomer = null;
     }

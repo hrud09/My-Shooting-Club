@@ -310,8 +310,8 @@ Transform:
   m_GameObject: {fileID: 600761992225143121}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.1005, y: 0.0713, z: -0.7454}
-  m_LocalScale: {x: 0.43730557, y: 0.09358677, z: 0.65091836}
+  m_LocalPosition: {x: -0, y: 0.0713, z: -0.4817}
+  m_LocalScale: {x: 0.43730557, y: 0.09358677, z: 0.41007856}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2241054571561904477}
@@ -654,7 +654,7 @@ GameObject:
   - component: {fileID: 2241054571561904477}
   - component: {fileID: 5141658762449787439}
   m_Layer: 12
-  m_Name: Shooting Spot
+  m_Name: Shooting Spot GFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -669,11 +669,12 @@ Transform:
   m_GameObject: {fileID: 2188946223602218223}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.452, z: -9.079}
+  m_LocalPosition: {x: -0, y: -0.452, z: -10.11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2924437945768034710}
+  - {fileID: 8553189846537160906}
   m_Father: {fileID: 5403869479765058072}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &5141658762449787439
@@ -693,7 +694,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.9265076, y: 1.3905542, z: 1.7477778}
   m_Center: {x: -7.627896e-16, y: 0.78355825, z: -0.1963234}
@@ -1048,7 +1049,7 @@ MonoBehaviour:
   isUnlocked: 0
   isOccupied: 0
   isOutOfService: 0
-  shootingSpot: {fileID: 2241054571561904477}
+  shootingSpot: {fileID: 8553189846537160906}
   weaponManager: {fileID: 7438539115188500130}
   yRotationWhileShooting: 0
   outOfAmmoSign: {fileID: 5569361939590135128}
@@ -2479,6 +2480,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.0000005, y: 1, z: 1.0000005}
   m_Center: {x: 0.0000033378617, y: 0, z: -0.0000028610239}
+--- !u!1 &6781063620407126616
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8553189846537160906}
+  m_Layer: 12
+  m_Name: Shooting Spot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8553189846537160906
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6781063620407126616}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.178, z: 0.11}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2241054571561904477}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6839108814728858002
 GameObject:
   m_ObjectHideFlags: 0

@@ -82,7 +82,7 @@ public class CustomerManager : MonoBehaviour
 
             customersInSofa.Remove(c);
             c.shootingRange = shootingAreaManager.GetFreeShootinRange();
-            c.MoveToTargetPosition(shootingAreaManager.GetFreeShootinRange().shootingSpot, MovingTo.ShootingRange);
+            c.MoveToTargetPosition(c.shootingRange.shootingSpot, MovingTo.ShootingRange);
         }
 
     }

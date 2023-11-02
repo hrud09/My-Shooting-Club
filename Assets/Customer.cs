@@ -18,7 +18,7 @@ public class Customer : MonoBehaviour
 
     public GameObject headphones;
     //public int sofaId;
-
+    public MovingTo moving;
     public void InitializeCustomer(CustomerInfo info)
     {
         for (int i = 0; i < meshParent.childCount; i++)
@@ -37,7 +37,7 @@ public class Customer : MonoBehaviour
         AnimationControll(1);
         customerInfo.agent.SetDestination(destination.position);
 
-
+        moving = movingTo;
         if (movingTo == MovingTo.CustomerLine)
         {
             StartCoroutine(PostArivalAction(destination.position, () => {
@@ -76,8 +76,11 @@ public class Customer : MonoBehaviour
         }
         else if (movingTo == MovingTo.ShootingRange)
         {
+            print("Shoot");
+            //shootingRange = customerManager.shootingAreaManager.GetFreeShootinRange();
             StartCoroutine(PostArivalAction(destination.position, () =>
             {
+                print("Shoot");
                 Shoot();
             }));
         }
@@ -87,7 +90,11 @@ public class Customer : MonoBehaviour
 
            shootingRange.isOccupied = false;
            shootingRange.outOfAmmoSign.SetActive(true);
-           StartCoroutine(PostArivalAction(destination.position, () => {
+            customerInfo.isInsideShootingRange = false;
+            customerInfo.hasWeapon = false;
+            currentWeapon = null;
+            shootingRange = null;
+            StartCoroutine(PostArivalAction(destination.position, () => {
 
                 customerInfo.shootingIsOver = false;
                 customerManager.ReturnCustomerPooledObject(this);
@@ -99,6 +106,7 @@ public class Customer : MonoBehaviour
 
     public void Shoot()
     {
+        print("shoot");
         customerInfo.isInsideShootingRange = true;
         // transform.DOLocalRotate(Vector3.back * 90, 0.3f);
         customerInfo.agent.enabled = false;
@@ -156,7 +164,7 @@ public class Customer : MonoBehaviour
             shootingRange = null;
         }
     }
-    private void OnTriggerExit(Collider other)
+ /*   private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.layer == 12)
         {
@@ -166,7 +174,7 @@ public class Customer : MonoBehaviour
             shootingRange = null;
 
         }
-    }
+    }*/
 
     public void AnimationControll(float speed)
     {
@@ -181,7 +189,7 @@ public class Customer : MonoBehaviour
     {
         yield return new WaitUntil(() => Vector3.Distance(transform.position, destination) <= 0.1f);
         AnimationControll(0);
-        yield return new WaitUntil(() => Vector3.Distance(transform.position, destination) <= 0.05f);
+        yield return new WaitUntil(() => Vector3.Distance(transform.position, destination) <= 0.5f);
         postArivalAction.Invoke();
        
     }
