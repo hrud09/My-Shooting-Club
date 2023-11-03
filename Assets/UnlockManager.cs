@@ -27,12 +27,14 @@ public class UnlockManager : MonoBehaviour
     private float originalTextScale;
 
 
-    [SerializeField] float timePerDollar = 0.01f;
+    float timePerDollarConst = 0.01f;
+    public float timePerDoller;
     // Start is called before the first frame update
     void Awake()
     {
         unlockAreaID = buildingType.ToString() + unlockIndex;
         currentValue = PlayerPrefs.GetInt(unlockAreaID + "CurrentValue", unlockCost);
+        timePerDoller = 5 / currentValue;
         if (currentValueText != null) originalTextScale = currentValueText.transform.localScale.x;
         if (PlayerPrefs.GetInt(unlockAreaID, 0) == 1) Unlock(true);
         UpdateCurrentValueText();
@@ -42,7 +44,7 @@ public class UnlockManager : MonoBehaviour
     {
         if (IsUnlockable())
         {
-            timePerDollar = 0.01f;
+            timePerDollarConst = timePerDoller;
             currentValue -= 1;
             EconomyManager.UpdateEconomy(-1);
             if (currentValue <= 0) Unlock();
@@ -50,12 +52,12 @@ public class UnlockManager : MonoBehaviour
         }
         else
         {
-            timePerDollar -= Time.deltaTime;
+            timePerDollarConst -= Time.deltaTime;
         }
     }
     private bool IsUnlockable()
     {
-        return player && !isUnlocked && currentValue > 0 && EconomyManager.MoneyCount > 0 && timePerDollar <= 0;
+        return player && !isUnlocked && currentValue > 0 && EconomyManager.MoneyCount > 0 && timePerDollarConst <= 0;
     }
     private void Unlock(bool isStartingUnlockCall = false)
     {
