@@ -40,7 +40,7 @@ public class WeaponManager : MonoBehaviour
 
         package.transform.parent = null;
 
-        package.transform.DOJump(reloadArea.position, 2, 1, 0.5f).OnComplete(()=> {
+        package.transform.DOJump(reloadArea.position + Vector3.up * 0.5f, 2, 1, 0.5f).OnComplete(()=> {
 
 
             reloadFill.gameObject.SetActive(true);
